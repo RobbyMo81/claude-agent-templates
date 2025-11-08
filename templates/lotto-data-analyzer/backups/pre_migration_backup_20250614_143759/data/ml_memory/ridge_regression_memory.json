@@ -1,0 +1,22 @@
+{
+  "model_type": "ridge_regression",
+  "timestamp": "2025-06-12T01:21:53.490900",
+  "hyperparameters": {
+    "alpha": 1.0
+  },
+  "performance_metrics": {
+    "cv_mae_mean": 7.8971969677520075,
+    "cv_mae_std": 0.07121622481391067,
+    "cv_score_best": 7.825947434200145,
+    "cv_score_worst": 8.01091767192065
+  },
+  "model_artifact_id": "data/ml_memory/models/ridge_regression_ridge_regression_20250612_012030.joblib",
+  "training_duration_seconds": 83.03991,
+  "dataset_info": {
+    "total_draws": 2305,
+    "date_range": "1999-12-29 to 2025-06-09",
+    "features_count": 11
+  },
+  "success": true,
+  "notes": "Training completed with 2305 draws using 11 features"
+}

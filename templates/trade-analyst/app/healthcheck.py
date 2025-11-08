@@ -1,0 +1,679 @@
+"""Health check system for monitoring application and dependencies"""
+
+import logging
+import asyncio
+import aiohttp
+import json
+import psutil
+from typing import List, Dict, Any, Optional
+from datetime import datetime
+from dataclasses import dataclass
+from pathlib import Path
+import os
+from .config import Config, load_config
+from .utils.validators import is_valid_redirect_format, exact_match
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class HealthCheck:
+    """Individual health check result"""
+    name: str
+    status: str  # 'healthy', 'unhealthy', 'warning'
+    message: str
+    error: Optional[str] = None
+    duration_ms: Optional[float] = None
+    metadata: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class HealthStatus:
+    """Overall health status"""
+    is_healthy: bool
+    timestamp: str
+    checks: List[HealthCheck]
+    summary: Dict[str, int]
+
+
+class HealthChecker:
+    """Performs various health checks on the application and its dependencies"""
+    
+    def __init__(self, config: Config):
+        self.config = config
+        self.timeout = config.get('health_check_timeout', 30)  # seconds
+    
+    async def check_all(self) -> HealthStatus:
+        """
+        Run all health checks
+        
+        Returns:
+            HealthStatus: Overall health status with individual check results
+        """
+        try:
+            logger.info("Running comprehensive health checks")
+            start_time = datetime.now()
+            
+            # Run all health checks concurrently
+            check_tasks = [
+                self.check_system_resources(),
+                self.check_disk_space(),
+                self.check_log_files(),
+                self.check_data_directories(),
+                self.check_api_connectivity(),
+                self.check_authentication(),
+                self.check_database_connectivity(),
+                self.check_redirect_allowlist(),
+                self.check_external_dependencies(),
+                self.check_schwab_market_server()
+            ]
+            
+            results = await asyncio.gather(*check_tasks, return_exceptions=True)
+            
+            # Process results
+            checks = []
+            for result in results:
+                if isinstance(result, Exception):
+                    checks.append(HealthCheck(
+                        name="health_check_error",
+                        status="unhealthy",
+                        message="Health check failed",
+                        error=str(result)
+                    ))
+                elif result:
+                    checks.append(result)
+            
+            # Calculate overall health
+            is_healthy = all(check.status == 'healthy' for check in checks)
+            
+            # Create summary
+            summary = {
+                'healthy': sum(1 for check in checks if check.status == 'healthy'),
+                'unhealthy': sum(1 for check in checks if check.status == 'unhealthy'),
+                'warning': sum(1 for check in checks if check.status == 'warning')
+            }
+            
+            health_status = HealthStatus(
+                is_healthy=is_healthy,
+                timestamp=datetime.now().isoformat(),
+                checks=checks,
+                summary=summary
+            )
+            
+            duration = (datetime.now() - start_time).total_seconds()
+            logger.info(f"Health checks completed in {duration:.2f}s - Status: {'healthy' if is_healthy else 'unhealthy'}")
+            
+            return health_status
+            
+        except Exception as e:
+            logger.error(f"Health check failed: {e}")
+            return HealthStatus(
+                is_healthy=False,
+                timestamp=datetime.now().isoformat(),
+                checks=[HealthCheck(
+                    name="health_check_system",
+                    status="unhealthy",
+                    message="Health check system failure",
+                    error=str(e)
+                )],
+                summary={'healthy': 0, 'unhealthy': 1, 'warning': 0}
+            )
+    
+    async def check_system_resources(self) -> HealthCheck:
+        """Check system resource usage"""
+        try:
+            start_time = datetime.now()
+            
+            # Check CPU usage
+            cpu_percent = psutil.cpu_percent(interval=1)
+            
+            # Check memory usage
+            memory = psutil.virtual_memory()
+            memory_percent = memory.percent
+            
+            # Check if resources are within acceptable limits
+            cpu_threshold = self.config.get('cpu_threshold', 80)
+            memory_threshold = self.config.get('memory_threshold', 85)
+            
+            status = 'healthy'
+            messages = []
+            
+            if cpu_percent > cpu_threshold:
+                status = 'warning' if cpu_percent < 95 else 'unhealthy'
+                messages.append(f"High CPU usage: {cpu_percent:.1f}%")
+            
+            if memory_percent > memory_threshold:
+                status = 'warning' if memory_percent < 95 else 'unhealthy'
+                messages.append(f"High memory usage: {memory_percent:.1f}%")
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="system_resources",
+                status=status,
+                message="; ".join(messages) if messages else "System resources normal",
+                duration_ms=duration,
+                metadata={
+                    'cpu_percent': cpu_percent,
+                    'memory_percent': memory_percent,
+                    'memory_available_gb': memory.available / (1024**3)
+                }
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="system_resources",
+                status="unhealthy",
+                message="Failed to check system resources",
+                error=str(e)
+            )
+    
+    async def check_disk_space(self) -> HealthCheck:
+        """Check available disk space"""
+        try:
+            start_time = datetime.now()
+            
+            # Check disk usage for current directory
+            disk_usage = psutil.disk_usage('.')
+            
+            # Calculate free space percentage
+            free_percent = (disk_usage.free / disk_usage.total) * 100
+            used_percent = 100 - free_percent
+            
+            # Check thresholds
+            disk_threshold = self.config.get('disk_threshold', 90)
+            
+            if used_percent > disk_threshold:
+                status = 'warning' if used_percent < 95 else 'unhealthy'
+                message = f"Low disk space: {used_percent:.1f}% used"
+            else:
+                status = 'healthy'
+                message = f"Disk space normal: {used_percent:.1f}% used"
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="disk_space",
+                status=status,
+                message=message,
+                duration_ms=duration,
+                metadata={
+                    'total_gb': disk_usage.total / (1024**3),
+                    'free_gb': disk_usage.free / (1024**3),
+                    'used_percent': used_percent
+                }
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="disk_space",
+                status="unhealthy",
+                message="Failed to check disk space",
+                error=str(e)
+            )
+    
+    async def check_log_files(self) -> HealthCheck:
+        """Check log file accessibility and rotation"""
+        try:
+            start_time = datetime.now()
+            
+            logs_dir = Path("logs")
+            
+            if not logs_dir.exists():
+                return HealthCheck(
+                    name="log_files",
+                    status="warning",
+                    message="Logs directory does not exist"
+                )
+            
+            # Check if logs directory is writable
+            test_file = logs_dir / "health_check_test.tmp"
+            try:
+                test_file.write_text("test")
+                test_file.unlink()
+            except Exception:
+                return HealthCheck(
+                    name="log_files",
+                    status="unhealthy",
+                    message="Logs directory is not writable"
+                )
+            
+            # Check log file sizes
+            log_files = list(logs_dir.glob("*.log"))
+            large_files = []
+            max_size_mb = self.config.get('max_log_size_mb', 100)
+            
+            for log_file in log_files:
+                size_mb = log_file.stat().st_size / (1024**2)
+                if size_mb > max_size_mb:
+                    large_files.append(f"{log_file.name} ({size_mb:.1f}MB)")
+            
+            status = 'warning' if large_files else 'healthy'
+            message = f"Large log files: {', '.join(large_files)}" if large_files else "Log files normal"
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="log_files",
+                status=status,
+                message=message,
+                duration_ms=duration,
+                metadata={
+                    'log_count': len(log_files),
+                    'large_files': len(large_files)
+                }
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="log_files",
+                status="unhealthy",
+                message="Failed to check log files",
+                error=str(e)
+            )
+    
+    async def check_data_directories(self) -> HealthCheck:
+        """Check data directory structure and accessibility"""
+        try:
+            start_time = datetime.now()
+            
+            required_dirs = ['data', 'data/quotes', 'data/historical', 'data/options', 'data/timesales']
+            missing_dirs = []
+            created_dirs = []
+            
+            for dir_path in required_dirs:
+                p = Path(dir_path)
+                if not p.exists():
+                    missing_dirs.append(dir_path)
+                    try:
+                        p.mkdir(parents=True, exist_ok=True)
+                        created_dirs.append(dir_path)
+                    except Exception:
+                        pass
+            
+            if missing_dirs and not created_dirs:
+                status = 'warning'
+                message = f"Missing data directories: {', '.join(missing_dirs)}"
+            else:
+                status = 'healthy'
+                if created_dirs:
+                    message = f"Created missing data directories: {', '.join(created_dirs)}"
+                else:
+                    message = "All data directories exist"
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="data_directories",
+                status=status,
+                message=message,
+                duration_ms=duration,
+                metadata={
+                    'required_dirs': len(required_dirs),
+                    'missing_dirs': len([d for d in required_dirs if not Path(d).exists()])
+                }
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="data_directories",
+                status="unhealthy",
+                message="Failed to check data directories",
+                error=str(e)
+            )
+    
+    async def check_api_connectivity(self) -> HealthCheck:
+        """Check connectivity to external APIs"""
+        try:
+            start_time = datetime.now()
+            
+            # Get API endpoints from configuration
+            api_endpoints = self.config.get('api_endpoints', {})
+            
+            if not api_endpoints:
+                return HealthCheck(
+                    name="api_connectivity",
+                    status="healthy",
+                    message="No API endpoints configured; skipping"
+                )
+            
+            results = {}
+            
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as session:
+                for provider, endpoint in api_endpoints.items():
+                    try:
+                        async with session.get(endpoint + '/health', ssl=False) as response:
+                            results[provider] = response.status == 200
+                    except Exception:
+                        results[provider] = False
+            
+            failed_apis = [provider for provider, success in results.items() if not success]
+            
+            if failed_apis:
+                status = 'warning' if len(failed_apis) < len(api_endpoints) else 'unhealthy'
+                message = f"API connectivity issues: {', '.join(failed_apis)}"
+            else:
+                status = 'healthy'
+                message = "All APIs accessible"
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="api_connectivity",
+                status=status,
+                message=message,
+                duration_ms=duration,
+                metadata={
+                    'total_apis': len(api_endpoints),
+                    'failed_apis': len(failed_apis)
+                }
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="api_connectivity",
+                status="unhealthy",
+                message="Failed to check API connectivity",
+                error=str(e)
+            )
+    
+    async def check_authentication(self) -> HealthCheck:
+        """Check authentication status"""
+        try:
+            start_time = datetime.now()
+            
+            # Candidate token cache paths (support legacy tokens.json and configured caches)
+            candidates = []
+            # From config
+            auth_token_file = self.config.get('auth.token_file', 'tokens.json')
+            runtime_cache = self.config.get('runtime.token_cache', 'token_cache.json')
+            candidates.extend([auth_token_file, runtime_cache])
+            # Common cache locations by env
+            candidates.extend([
+                '.cache/dev/token_cache.json',
+                '.cache/prod/token_cache.json',
+            ])
+            existing = [Path(p) for p in candidates if p and Path(p).exists()]
+            if not existing:
+                return HealthCheck(
+                    name="authentication",
+                    status="warning",
+                    message="No authentication tokens found"
+                )
+            # Try to parse any JSON cache; if encrypted or non-JSON, still consider healthy
+            total_providers = 0
+            parsed_any = False
+            for p in existing:
+                try:
+                    text = p.read_text(encoding='utf-8')
+                    data = json.loads(text)
+                    if isinstance(data, dict):
+                        parsed_any = True
+                        total_providers += len(data)
+                except Exception:
+                    # likely encrypted; ignore
+                    continue
+            if parsed_any and total_providers > 0:
+                status = 'healthy'
+                message = f"Authentication tokens available for {total_providers} providers"
+            else:
+                status = 'healthy'
+                message = "Token cache file(s) present"
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="authentication",
+                status=status,
+                message=message,
+                duration_ms=duration,
+                metadata={'files': [str(p) for p in existing]}
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="authentication",
+                status="unhealthy",
+                message="Failed to check authentication",
+                error=str(e)
+            )
+    
+    async def check_database_connectivity(self) -> HealthCheck:
+        """Check database connectivity (config-controlled)."""
+        try:
+            start_time = datetime.now()
+            dsn = self.config.get('database.dsn', '') or ''
+            required = bool(self.config.get('database.required', False))
+
+            if not dsn:
+                # No DSN configured; treat as non-blocking unless required
+                status = 'unhealthy' if required else 'warning'
+                message = "No database DSN configured" if required else "No DSN configured; non-blocking"
+            else:
+                # Minimal check for sqlite DSN; for others, warn
+                if dsn.startswith('sqlite:///'):
+                    # Ensure file path directory exists and is writable
+                    sqlite_path = dsn.replace('sqlite:///', '')
+                    p = Path(sqlite_path)
+                    try:
+                        p.parent.mkdir(parents=True, exist_ok=True)
+                        # touch the file lazily (won't create DB schema)
+                        if not p.exists():
+                            p.touch()
+                        status = 'healthy'
+                        message = 'SQLite path accessible'
+                    except Exception:
+                        status = 'unhealthy' if required else 'warning'
+                        message = 'SQLite path not writable'
+                else:
+                    status = 'warning' if not required else 'unhealthy'
+                    message = 'Non-sqlite DSN set; connectivity check not implemented'
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="database_connectivity",
+                status=status,
+                message=message,
+                duration_ms=duration
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="database_connectivity",
+                status="unhealthy",
+                message="Failed to check database connectivity",
+                error=str(e)
+            )
+    
+    async def check_external_dependencies(self) -> HealthCheck:
+        """Check external service dependencies"""
+        try:
+            start_time = datetime.now()
+            
+            # Check internet connectivity
+            test_urls = [
+                'https://www.google.com',
+                'https://httpbin.org/get'
+            ]
+            
+            connectivity_results = []
+            
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                for url in test_urls:
+                    try:
+                        async with session.get(url) as response:
+                            connectivity_results.append(response.status == 200)
+                    except Exception:
+                        connectivity_results.append(False)
+            
+            if any(connectivity_results):
+                status = 'healthy'
+                message = "Internet connectivity available"
+            else:
+                status = 'unhealthy'
+                message = "No internet connectivity"
+            
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            
+            return HealthCheck(
+                name="external_dependencies",
+                status=status,
+                message=message,
+                duration_ms=duration,
+                metadata={
+                    'tested_urls': len(test_urls),
+                    'successful_connections': sum(connectivity_results)
+                }
+            )
+            
+        except Exception as e:
+            return HealthCheck(
+                name="external_dependencies",
+                status="unhealthy",
+                message="Failed to check external dependencies",
+                error=str(e)
+            )
+
+    async def check_redirect_allowlist(self) -> HealthCheck:
+        """Validate that configured redirect is exactly registered."""
+        try:
+            # Smart-fail policy with env toggles
+            strict_redirect = (os.getenv("HC_STRICT_REDIRECT", "true").strip().lower() in {"1","true","yes","y","on"})
+            simulate = bool(self.config.get('auth.simulate', False))
+            redirect = self.config.get('env.dev.redirect_uri') or ''
+            registered = self.config.get('auth.registered_uris', []) or []
+            if not redirect:
+                return HealthCheck(
+                    name="redirect_uri",
+                    status="unhealthy",
+                    message="Redirect URI missing for env=dev",
+                )
+            if not is_valid_redirect_format(redirect):
+                return HealthCheck(
+                    name="redirect_uri",
+                    status="unhealthy",
+                    message=f"Redirect format invalid: {redirect}",
+                )
+            if not exact_match(redirect, registered):
+                if strict_redirect or not simulate:
+                    return HealthCheck(
+                        name="redirect_uri",
+                        status="unhealthy",
+                        message="Redirect URI not in exact allowlist (strict)",
+                        metadata={'redirect': redirect, 'strict': strict_redirect, 'simulate': simulate}
+                    )
+                else:
+                    return HealthCheck(
+                        name="redirect_uri",
+                        status="warning",
+                        message="Redirect URI not in exact allowlist (downgraded: simulate & strict=false)",
+                        metadata={'redirect': redirect, 'strict': strict_redirect, 'simulate': simulate}
+                    )
+            return HealthCheck(
+                name="redirect_uri",
+                status="healthy",
+                message="Redirect URI exact match",
+                metadata={'redirect': redirect}
+            )
+        except Exception as e:
+            return HealthCheck(
+                name="redirect_uri",
+                status="unhealthy",
+                message="Failed redirect validation",
+                error=str(e)
+            )
+
+    async def check_schwab_market_server(self) -> HealthCheck:
+        """Probe the Schwab market data base for basic reachability.
+
+        Policy:
+        - In simulate mode, downgrade failures to warning to avoid blocking local dev.
+        - Consider 2xx/3xx/404 as reachable; fail on DNS/TLS/network or 5xx.
+        """
+        try:
+            start_time = datetime.now()
+            simulate = bool(self.config.get('auth.simulate', False))
+            base = ''
+            try:
+                base = self.config.get_schwab_market_base()
+            except Exception:
+                base = ''
+            if not base:
+                return HealthCheck(
+                    name="schwab_market_server",
+                    status="warning",
+                    message="No marketdata base configured; skipping",
+                )
+            # Use a benign path like /ping or root
+            probe_urls = [f"{base}", f"{base}/ping"]
+            ok = False
+            code = None
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as session:
+                for url in probe_urls:
+                    try:
+                        async with session.get(url) as resp:
+                            code = resp.status
+                            if 200 <= code < 400 or code == 404:
+                                ok = True
+                                break
+                    except Exception:
+                        continue
+            duration = (datetime.now() - start_time).total_seconds() * 1000
+            if ok:
+                return HealthCheck(
+                    name="schwab_market_server",
+                    status="healthy",
+                    message="Market server reachable",
+                    duration_ms=duration,
+                    metadata={"base": base, "status": code}
+                )
+            else:
+                return HealthCheck(
+                    name="schwab_market_server",
+                    status=("warning" if simulate else "unhealthy"),
+                    message=("Unreachable (downgraded in simulate)" if simulate else "Unreachable"),
+                    duration_ms=duration,
+                    metadata={"base": base, "status": code}
+                )
+        except Exception as e:
+            return HealthCheck(
+                name="schwab_market_server",
+                status="unhealthy",
+                message="Failed market server probe",
+                error=str(e)
+            )
+
+# Lightweight runner used by tests in healthcheck_strict_redirect_patch
+def run_healthcheck(env: str = "dev") -> int:
+    cfg_dict = load_config()
+    cfg = Config()
+    hc = HealthChecker(cfg)
+    # Only run the redirect check for exit status parity with tests
+    import asyncio as _asyncio
+    result: HealthCheck = _asyncio.run(hc.check_redirect_allowlist())
+    return 0 if result.status != 'unhealthy' else 2
+
+
+# Example usage
+async def main():
+    """Example usage of HealthChecker"""
+    config = Config()
+    health_checker = HealthChecker(config)
+    
+    health_status = await health_checker.check_all()
+    
+    print(f"Overall Health: {'✅ Healthy' if health_status.is_healthy else '❌ Unhealthy'}")
+    print(f"Timestamp: {health_status.timestamp}")
+    print(f"Summary: {health_status.summary}")
+    print("\nDetailed Results:")
+    
+    for check in health_status.checks:
+        status_icon = {'healthy': '✅', 'warning': '⚠️', 'unhealthy': '❌'}.get(check.status, '❓')
+        print(f"  {status_icon} {check.name}: {check.message}")
+        if check.error:
+            print(f"    Error: {check.error}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

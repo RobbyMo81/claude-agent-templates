@@ -1,0 +1,38 @@
+# schemaVersion is required
+schemaVersion: '2.0.0'
+
+# We will define two types of tests: commandTests and fileExistenceTests
+
+commandTests:
+  # Test 1: Verify pip was upgraded and is executable
+  - name: "Check pip version"
+    command: "python"
+    args: ["-m", "pip", "--version"]
+    expectedOutput: ["pip 2"] # Checks that pip is a modern version (e.g., 23.x, 24.x)
+
+  # Test 2: Verify that all key packages can be imported by Python.
+  # This is a robust test because it confirms not only that the files exist,
+  # but that they are correctly installed and their dependencies are met.
+  - name: "Check Python package imports"
+    command: "python"
+    # We use the full path to python inside the /install prefix to ensure we are using the packages from there.
+    args:
+      - "-c"
+      - "import tensorflow; import tensorflow_probability; import numpy; import pandas; print('All packages imported successfully')"
+    env:
+      - key: "PYTHONPATH"
+        value: "/install/lib/python3.11/site-packages"
+    expectedOutput: ["All packages imported successfully"]
+
+fileExistenceTests:
+  # Test 3: Verify that TensorFlow was installed in the correct prefix directory.
+  - name: "Check TensorFlow installation directory"
+    path: '/install/lib/python3.11/site-packages/tensorflow'
+    shouldExist: true
+    permissions: 'drwxr-xr-x' # d for directory
+
+  # Test 4: Verify that a package from requirements.txt was installed in the correct prefix directory.
+  - name: "Check numpy installation directory"
+    path: '/install/lib/python3.11/site-packages/numpy'
+    shouldExist: true
+    permissions: 'drwxr-xr-x'

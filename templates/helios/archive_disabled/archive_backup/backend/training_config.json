@@ -1,0 +1,10 @@
+{
+    "num_epochs": 100,
+    "checkpoint_interval": 10,
+    "checkpoint_dir": "checkpoints",
+    "data_source": "C:\\Users\\RobMo\\OneDrive\\Documents\\PowerBall\\downloads\\powerball2015_Aug2025.csv",
+    "early_stop_patience": 5,
+    "lr_patience": 3,
+    "clip_grad_norm": 1.0,
+    "weight_decay": 1e-5
+}

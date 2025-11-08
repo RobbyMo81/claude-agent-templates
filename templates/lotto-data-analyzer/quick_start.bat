@@ -1,0 +1,3 @@
+@echo off
+echo Starting Powerball Insights...
+powershell -ExecutionPolicy Bypass -File "%~dp0quick_start.ps1"

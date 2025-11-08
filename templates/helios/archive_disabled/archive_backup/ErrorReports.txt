@@ -1,0 +1,60 @@
+'''
+metacognition.py
+Argument of type "floating[Any] | float64 | float" cannot be assigned to parameter "arg2" of type "SupportsRichComparisonT@max" in function "max"
+  Type "floating[Any] | float64 | float" is not assignable to type "float"
+    "floating[Any]" is not assignable to "float"
+"RankWarning" is not a known attribute of module "numpy"
+Argument of type "floating[Any] | float64 | float" cannot be assigned to parameter "arg2" of type "SupportsRichComparisonT@min" in function "min"
+  Type "floating[Any] | float64 | float" is not assignable to type "float"
+    "floating[Any]" is not assignable to "float"
+"RankWarning" is not a known attribute of module "numpy"
+Argument of type "floating[Any] | float64" cannot be assigned to parameter "arg2" of type "SupportsRichComparisonT@min" in function "min"
+  Type "floating[Any] | float64" is not assignable to type "float"
+    "floating[Any]" is not assignable to "float"
+'''
+'''
+trainer.py
+No overloads for "__getitem__" match the provided arguments
+Argument of type "tuple[int, list[str]]" cannot be assigned to parameter "idx" of type "tuple[Scalar, slice[Any, Any, Any]]" in function "__getitem__"
+  "tuple[int, list[str]]" is not assignable to "tuple[Scalar, slice[Any, Any, Any]]"
+    Tuple entry 2 is incorrect type
+      "list[str]" is not assignable to "slice[Any, Any, Any]"
+"prepare_data" is not a known attribute of "None"
+"model" is not a known attribute of "None"
+"model" is not a known attribute of "None"
+"model" is not a known attribute of "None"
+Object of type "None" is not subscriptable
+Object of type "None" is not subscriptable
+Object of type "None" is not subscriptable
+"training_history" is not a known attribute of "None"
+Object of type "None" is not subscriptable
+"job_info" is possibly unbound
+"metadata" is not a known attribute of "None"
+"epoch" is possibly unbound
+"metadata" is not a known attribute of "None"
+"metadata" is not a known attribute of "None"
+"memory_store" is not defined
+'''
+'''
+CrossModelAnalytics.tsx
+Cannot find module '@mui/material' or its corresponding type declarations.
+Cannot find module '@mui/icons-material' or its corresponding type declarations.
+'''
+'''
+MetacognitiveDashboard.tsx
+Cannot find module '@mui/material' or its corresponding type declarations.
+Cannot find module '@mui/icons-material' or its corresponding type declarations.
+'Speed' is declared but its value is never read.
+'LineChart' is declared but its value is never read.
+'Line' is declared but its value is never read.
+'event' is declared but its value is never read.
+'''
+'''
+C:\Users\RobMo\OneDrive\Documents\helios\backend\Dockerfile
+'StressTestResult' is declared but its value is never read.
+CSS inline styles should not be used, move styles to an external CSS file
+'''
+'''
+C:\Users\RobMo\OneDrive\Documents\helios\components\TrainingProgress.tsx
+CSS inline styles should not be used, move styles to an external CSS file
+'''

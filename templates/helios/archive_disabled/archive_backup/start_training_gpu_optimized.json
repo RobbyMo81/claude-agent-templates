@@ -1,0 +1,12 @@
+{
+    "modelName": "helios_gpu_optimized_powerball_2025",
+    "epochs": 100,
+    "learningRate": 0.0005,
+    "batchSize": 64,
+    "sequenceLength": 75,
+    "validationSplit": 0.15,
+    "earlyStoppingPatience": 15,
+    "minDelta": 0.0005,
+    "saveBestOnly": true,
+    "dataSource": "c:/Users/RobMo/OneDrive/Documents/helios/helios_compatible_powerball.csv"
+}

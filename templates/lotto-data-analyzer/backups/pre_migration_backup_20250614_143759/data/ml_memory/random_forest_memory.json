@@ -1,0 +1,23 @@
+{
+  "model_type": "random_forest",
+  "timestamp": "2025-06-12T01:28:33.743786",
+  "hyperparameters": {
+    "n_estimators": 400,
+    "max_depth": 20
+  },
+  "performance_metrics": {
+    "cv_mae_mean": 8.658317868846515,
+    "cv_mae_std": 0.0954153065441841,
+    "cv_score_best": 8.507339447500177,
+    "cv_score_worst": 8.803452396858244
+  },
+  "model_artifact_id": "data/ml_memory/models/random_forest_random_forest_20250612_012615.joblib",
+  "training_duration_seconds": 138.423899,
+  "dataset_info": {
+    "total_draws": 2305,
+    "date_range": "1999-12-29 to 2025-06-09",
+    "features_count": 11
+  },
+  "success": true,
+  "notes": "Training completed with 2305 draws using 11 features"
+}

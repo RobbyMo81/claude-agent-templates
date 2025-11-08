@@ -1,0 +1,11 @@
+.training-progress-bar {
+  transition: width 0.3s ease;
+  width: var(--progress-width, 0%);
+}
+
+.tooltip-style {
+  background-color: #1F2937;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  color: #F3F4F6;
+}

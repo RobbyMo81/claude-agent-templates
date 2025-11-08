@@ -1,0 +1,438 @@
+Excellent. The command is given. The strategy is set. We are upgrading Helios from a stateless calculator to a stateful, intelligent agent.
+
+This PRD outlines the refactoring necessary to implement version 0.9.0. It's a significant but crucial evolution. The seed code provided will demonstrate how to modify our existing Python/REACT structure to incorporate these powerful new concepts of journaling, remembering, and reflecting.
+
+Let's build.
+
+Product Requirements Document: Project Helios v0.9.0 - "The Agent"
+
+Document Version: 2.1
+
+Status: Approved for Refactoring
+
+Target Version: 0.9.0
+
+Theme: "Metacognition & Persistence"
+
+1. Vision & Justification
+
+1.1. Vision: To transform Helios from a simple analysis tool into a true intelligent agent with a persistent memory. The system must not only perform calculations but also remember how it was trained, recall its knowledge on demand, and provide a transparent view into its own learning process.
+
+1.2. Justification for Refactoring: The current v0 (MVP) architecture is stateless. Each run is an isolated event. This prevents us from building our "Ensemble of Specialists," comparing models over time, and gaining deeper insights into the learning process itself. This refactoring introduces the foundational concepts of Journaling, Remembering, and Reflecting, which are prerequisites for all future advanced work (Levels 2 and 3).
+
+2. Goals & Objectives for v0.9.0
+
+Primary Goal: To successfully refactor the Helios application to save, load, and manage trained models and their associated training metadata.
+
+Technical Goal: To create a standardized, structured system for storing model artifacts (.pth files) and training logs (.json files).
+
+User Goal: To enhance the REACT UI to allow for training new models, loading existing models for analysis, and visualizing the learning history (loss curves) of any given model.
+
+Strategic Goal: To make the "Ensemble of Specialists" strategy a tangible reality within the application's architecture.
+
+3. Refactored Scope & Features
+Feature 1: The Model Training Mission (Refactored)
+
+Description: A new mission in the REACT UI dedicated to training a probabilistic model.
+
+Requirements:
+
+The UI must provide fields for the user to name their new model (e.g., modern_era_v1) and set training parameters (e.g., epochs, learning rate).
+
+The training process must be executed by a new Trainer class in the backend.
+
+Crucially: Upon completion, the trainer must save two artifacts to a dedicated ./models/ directory:
+
+The trained model weights: ./models/modern_era_v1.pth
+
+The training journal: ./models/modern_era_v1.json
+
+The journal must contain: model_name, timestamp, training_data_source, date_range_trained, epochs, learning_rate, and a loss_history array.
+
+Feature 2: The Model Management System (New)
+
+Description: A system for organizing and accessing the "brains" of our agents.
+
+Requirements:
+
+The app must scan the ./models/ directory on startup to find all available models.
+
+The REACT UI's "Backtest" mission must now have a dropdown (st.selectbox) populated with the names of all discovered models (e.g., modern_era_v1, wednesday_specialist), in addition to the Random agent.
+
+When a user selects a trained model, the backend must load the corresponding .pth file into memory for use in inference/backtesting.
+
+Feature 3: The Metacognitive UI (New)
+
+Description: A new UI component for reflecting on a model's learning process.
+
+Requirements:
+
+A new "Model Insights" or "Reflect" tab in the results panel.
+
+When a user runs a backtest with a trained model, this tab will become active.
+
+The app will load the corresponding .json journal for the selected model.
+
+It will display key metadata from the journal (training date, epochs, etc.).
+
+It will render an interactive line chart (st.line_chart) showing the loss_history, providing a visual representation of the model's learning journey.
+
+4. Seed Code for Refactoring
+
+This seed code demonstrates the necessary changes. It introduces a placeholder for a PyTorch model and the logic for saving/loading.
+
+Instructions:
+
+Create a new folder named models in your project's root directory.
+
+Install PyTorch: pip install torch
+
+Update your existing .py files with the new logic.
+
+1. src/components/HeliosAgentControl.jsx(The Refactored REACT UI)
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Slider } from '@/components/ui/slider';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
+
+export default function HeliosAgentControl() {
+  const [file, setFile] = useState(null);
+  const [mission, setMission] = useState('Backtest Agent');
+  const [modelName, setModelName] = useState('');
+  const [epochs, setEpochs] = useState(50);
+  const [learningRate, setLearningRate] = useState(0.001);
+  const [selectedModel, setSelectedModel] = useState('Random');
+  const [availableModels, setAvailableModels] = useState(['Random']);
+  const [launching, setLaunching] = useState(false);
+  const [lossHistory, setLossHistory] = useState([]);
+  const [resultsData, setResultsData] = useState([]);
+  const [journal, setJournal] = useState(null);
+
+  const handleFileChange = e => {
+    setFile(e.target.files[0]);
+  };
+
+  const fetchModels = async () => {
+    try {
+      const res = await axios.get('/api/models');
+      setAvailableModels(['Random', ...res.data]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchModels();
+  }, []);
+
+  const handleLaunch = async () => {
+    if (!file) return;
+    setLaunching(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('mission', mission);
+
+    if (mission === 'Train New Agent') {
+      formData.append('modelName', modelName);
+      formData.append('epochs', epochs);
+      formData.append('learningRate', learningRate);
+      const res = await axios.post('/api/train', formData);
+      setLossHistory(res.data.lossHistory);
+    } else {
+      formData.append('selectedModel', selectedModel);
+      const res = await axios.post('/api/backtest', formData);
+      setResultsData(res.data.results);
+      setJournal(res.data.journal);
+    }
+
+    setLaunching(false);
+  };
+
+  return (
+    <div className="p-4 space-y-6">
+      <Card>
+        <CardHeader>
+          <h1 className="text-xl font-bold"> Helios Agent Control v0.9.0</h1>
+          <p className="text-sm text-gray-500">A stateful agent with memory.</p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>1. Load Data</Label>
+              <Input type="file" accept=".csv" onChange={handleFileChange} />
+            </div>
+            <div className="space-y-2">
+              <Label>2. Select Mission</Label>
+              <RadioGroup value={mission} onChange={setMission} className="flex space-x-4">
+                <RadioGroupItem value="Backtest Agent" /><span>Backtest Agent</span>
+                <RadioGroupItem value="Train New Agent" /><span>Train New Agent</span>
+              </RadioGroup>
+            </div>
+            {mission === 'Train New Agent' && (
+              <div className="space-y-4">
+                <div>
+                  <Label>New Model Name</Label>
+                  <Input
+                    placeholder="modern_era_v1"
+                    value={modelName}
+                    onChange={e => setModelName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label>Epochs: {epochs}</Label>
+                  <Slider
+                    value={[epochs]}
+                    min={10}
+                    max={200}
+                    onValueChange={val => setEpochs(val[0])}
+                  />
+                </div>
+                <div>
+                  <Label>Learning Rate</Label>
+                  <Input
+                    type="number"
+                    step={0.0001}
+                    min={0.0001}
+                    max={0.1}
+                    value={learningRate}
+                    onChange={e => setLearningRate(parseFloat(e.target.value))}
+                  />
+                </div>
+              </div>
+            )}
+            {mission === 'Backtest Agent' && (
+              <div className="space-y-2">
+                <Label>Select Agent to Test</Label>
+                <select
+                  className="w-full border rounded p-2"
+                  value={selectedModel}
+                  onChange={e => setSelectedModel(e.target.value)}
+                >
+                  {availableModels.map(m => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <Button
+              onClick={handleLaunch}
+              disabled={!file || (mission === 'Train New Agent' && !modelName) || launching}
+            >
+              {launching ? 'Processing...' : mission}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {lossHistory.length > 0 && (
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold">Training Loss Curve</h2>
+          </CardHeader>
+          <CardContent style={{ height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={lossHistory.map((loss, idx) => ({ epoch: idx + 1, loss }))}>
+                <CartesianGrid />
+                <XAxis dataKey="epoch" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="loss" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
+
+      {resultsData.length > 0 && (
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold">Backtest Performance Report</h2>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Prize Tier</TableHead>
+                  <TableHead>Hit Count</TableHead>
+                  <TableHead>Frequency (1 in X)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {resultsData.map(row => (
+                  <TableRow key={row.prizeTier}>
+                    <TableCell>{row.prizeTier}</TableCell>
+                    <TableCell>{row.hitCount}</TableCell>
+                    <TableCell>{row.frequency}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            {journal && (
+              <div className="mt-4">
+                <details>
+                  <summary className="cursor-pointer font-medium"> View Agent's Learning Journal</summary>
+                  <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto">
+                    {JSON.stringify(journal, null, 2)}
+                  </pre>
+                </details>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+'''
+
+2. agent.py (Refactored to be a Class)
+Generated python
+import random
+import torch
+import torch.nn as nn
+import os
+
+MODEL_DIR = "models"
+
+# --- Define a simple placeholder neural network ---
+# In a real scenario, this would be much more complex.
+class PowerballNet(nn.Module):
+    def __init__(self):
+        super(PowerballNet, self).__init__()
+        # Placeholder layers. Input size would depend on our feature engineering.
+        self.fc1 = nn.Linear(10, 128) # Assuming 10 input features
+        self.relu = nn.ReLU()
+        # Output: 69 probabilities for white balls + 26 for powerball
+        self.output_wb = nn.Linear(128, 69)
+        self.output_pb = nn.Linear(128, 26)
+
+    def forward(self, x):
+        x = self.relu(self.fc1(x))
+        out_wb = self.output_wb(x)
+        out_pb = self.output_pb(x)
+        return out_wb, out_pb
+
+# --- The original simple function remains ---
+def generate_random_ticket():
+    """Generates a single random Powerball ticket."""
+    white_balls = sorted(random.sample(range(1, 70), 5))
+    powerball = random.randint(1, 26)
+    return white_balls, powerball
+
+# --- The new stateful agent class ---
+class MLPowerballAgent:
+    def __init__(self, model_name):
+        self.model_name = model_name
+        self.model_path = os.path.join(MODEL_DIR, f"{self.model_name}.pth")
+        self.model = PowerballNet()
+
+    def load_model(self):
+        """Loads the trained model weights from memory."""
+        if not os.path.exists(self.model_path):
+            raise FileNotFoundError(f"Model file not found at {self.model_path}")
+        self.model.load_state_dict(torch.load(self.model_path))
+        self.model.eval() # Set model to evaluation mode
+        print(f"Agent '{self.model_name}' has loaded its brain.")
+
+    def predict_ticket(self):
+        """
+        Uses the loaded model to predict a ticket.
+        This is a placeholder for the real prediction logic.
+        """
+        # In a real scenario, you'd create an input tensor based on the current date, etc.
+        # For this seed code, we'll return a random ticket to make it runnable.
+        # TODO: Replace with actual model inference
+        with torch.no_grad():
+            # dummy_input = torch.randn(1, 10) # Create a dummy input
+            # wb_logits, pb_logits = self.model(dummy_input)
+            # Use wb_logits and pb_logits to intelligently select numbers
+            pass
+        return generate_random_ticket() # Placeholder
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Python
+IGNORE_WHEN_COPYING_END
+3. trainer.py (New Module for Training Logic)
+Generated python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import json
+import os
+import time
+from agent import PowerballNet # Import our network definition
+
+MODEL_DIR = "models"
+
+class Trainer:
+    def __init__(self, model_name, dataframe, epochs, learning_rate):
+        self.model_name = model_name
+        self.dataframe = dataframe
+        self.epochs = epochs
+        self.lr = learning_rate
+        self.model = PowerballNet()
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
+        # Placeholder loss function
+        self.criterion = nn.CrossEntropyLoss()
+
+    def train(self):
+        """The main training loop."""
+        loss_history = []
+        print(f"Starting training for {self.model_name}...")
+        
+        for epoch in range(self.epochs):
+            # --- This is a placeholder for the real training loop ---
+            # You would iterate through your data, create input tensors and labels,
+            # calculate loss, and perform backpropagation.
+            # For this seed code, we simulate the process.
+            # TODO: Implement the actual training logic
+            
+            # Simulate a decreasing loss
+            simulated_loss = 1.0 / (epoch + 1) + random.uniform(-0.05, 0.05)
+            loss_history.append(simulated_loss)
+            
+            print(f"Epoch {epoch+1}/{self.epochs}, Loss: {simulated_loss:.4f}")
+            time.sleep(0.1) # Simulate training time
+
+        self.save_artifacts(loss_history)
+        return loss_history
+
+    def save_artifacts(self, loss_history):
+        """Saves the model weights and the training journal."""
+        # 1. Save the model's "brain"
+        model_path = os.path.join(MODEL_DIR, f"{self.model_name}.pth")
+        torch.save(self.model.state_dict(), model_path)
+
+        # 2. Save the learning journal
+        journal_path = os.path.join(MODEL_DIR, f"{self.model_name}.json")
+        journal_data = {
+            "model_name": self.model_name,
+            "timestamp": time.time(),
+            "training_data_source": f"CSV with {len(self.dataframe)} rows",
+            "epochs": self.epochs,
+            "learning_rate": self.lr,
+            "loss_history": loss_history
+        }
+        with open(journal_path, 'w') as f:
+            json.dump(journal_data, f, indent=4)
+        
+        print(f"Artifacts saved for model '{self.model_name}'.")
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Python
+IGNORE_WHEN_COPYING_END

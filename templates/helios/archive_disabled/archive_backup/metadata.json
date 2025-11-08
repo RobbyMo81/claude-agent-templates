@@ -1,0 +1,5 @@
+{
+  "name": "Helios: Powerball Anomaly Detection",
+  "description": "An application to analyze historical Powerball data, establish a random performance baseline, and identify statistical anomalies using AI.",
+  "requestFramePermissions": []
+}

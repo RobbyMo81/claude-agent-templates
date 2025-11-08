@@ -1,0 +1,36 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Immediate Action Required: Project Triage & Stabilization - Phase 1
+
+**Objective:**
+This directive initiates **Phase 1: Triage & Stabilization** of the ML application project. Your immediate priority is to address the critical, user-impacting runtime failures identified in the `ML_MODEL_STORAGE_PREDICTION_ANALYSIS_REPORT.md`. The goal is to stabilize the system and eliminate known prediction storage errors by the end of this week.
+
+**Context:**
+The analysis report (Section 4.2 "API Interface Inconsistencies" and Section 4.4 "Prediction Validation Logic") has identified several high-priority issues causing system instability. Your work will focus exclusively on the "Priority 1 - Critical Fixes" outlined in Section 9.1 of that report.
+
+**Required Tasks:**
+
+1.  **Standardize API Storage Interface:**
+    * Locate all calls to the prediction storage methods (`store_model_predictions`, `store_predictions`, etc.).
+    * Resolve the identified parameter mismatch errors (e.g., `got an unexpected keyword argument 'set_id'`).
+    * Refactor the various method signatures into a single, consistent interface for storing predictions, ensuring all calls throughout the application use this new standard signature. Implement strict type hinting for all parameters.
+
+2.  **Refactor Prediction Validation Logic:**
+    * Modify the storage layer to remove the rigid validation constraint that requires exactly 5 predictions (`if len(predictions) != 5`).
+    * Implement more flexible validation logic that can gracefully handle and store both single predictions and batches of predictions of varying sizes.
+
+**Deliverable:**
+Upon completion of the tasks, you are required to produce a formal "System Stabilization Report". This report must detail the issues identified, the corrective actions taken (including code-level changes), and the results of your validation testing.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: System Stabilization Report: ML Storage & API Consolidation (Phase 1)
+Report Date: [Date of Completion]
+Analysis Scope: Correction of critical runtime failures in the ML prediction storage and validation layers.
+System Status: Stabilized - All identified Priority 1 issues resolved.
+Analyst: [Your Name/Identifier]
+```
+
+This report will serve as the official documentation that Phase 1 is complete, allowing us to proceed with architectural consolidation. Please begin work immediately and provide a status update at the end of each day.

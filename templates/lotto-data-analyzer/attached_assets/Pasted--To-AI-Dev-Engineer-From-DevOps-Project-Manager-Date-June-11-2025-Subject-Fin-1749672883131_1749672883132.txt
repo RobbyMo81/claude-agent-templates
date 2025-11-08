@@ -1,0 +1,43 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Final Action Required: Legacy Data Migration & Deprecation - Phase 3
+
+**Objective:**
+This directive formally initiates the final phase of our project, **Phase 3: Legacy Data Migration & Deprecation**. With the new architecture fully consolidated and stable, your objective is to migrate all historical data from the legacy `joblib` files into the production SQLite database. Following a successful migration, you will permanently remove all legacy artifacts, leaving a single, unified system.
+
+**Context:**
+The successful completion of Phase 2 has provided a robust, service-oriented architecture, as documented in the `ARCHITECTURAL_CONSOLIDATION_REPORT_PHASE_2.md`. The system is now ready to absorb the historical data from the legacy files. This final phase will complete the work outlined in the initial `ML_MODEL_STORAGE_PREDICTION_ANALYSIS_REPORT.md` by fully deprecating the old system. The remaining legacy artifacts to be migrated and removed are identified in the Phase 2 report.
+
+**Required Tasks:**
+
+1.  **Develop Data Migration & Validation Scripts:**
+    * Create a standalone Python script to perform the data migration. This script must read the historical data from `data/prediction_history.joblib` and `data/prediction_models.joblib`.
+    * The script must carefully map and transform the legacy data structures to align with the new schema in the `model_predictions.db` SQLite database.
+    * Develop a separate validation process or function to verify the migration's success by comparing record counts and spot-checking data integrity between the legacy files and the new database records.
+
+2.  **Execute the Migration and Deprecate the Legacy System:**
+    * **CRITICAL:** Before running the migration, create a complete and secure backup of the `data/` directory.
+    * Execute the data migration script to populate the SQLite database with historical data.
+    * Run your validation process to confirm the migration was 100% successful and data integrity is preserved.
+    * **Once migration is verified**, permanently delete all legacy files and directories. This includes:
+        * `data/prediction_history.joblib`
+        * `data/prediction_models.joblib`
+        * All `data/prediction_history.joblib.backup...` files
+        * The entire `ml_memory/` directory
+    * Finally, remove any remaining legacy code, such as backward-compatibility shims or unused import statements related to the joblib system.
+
+**Deliverable:**
+Upon completion of all tasks, you are required to produce a final **"Project Completion & Migration Report"**. This report must detail the migration process, the validation results, and confirm the final, clean state of the system architecture and data directory.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: Project Completion & Migration Report (Phase 3)
+Report Date: [Date of Completion]
+Analysis Scope: Migration of historical data from legacy joblib storage to SQLite database and the complete deprecation of all legacy artifacts.
+System Status: Completed - System Fully Unified. All legacy data and components removed.
+Analyst: [Your Name/Identifier]
+```
+
+This report will serve as the final deliverable for this project, officially closing out our consolidation efforts.

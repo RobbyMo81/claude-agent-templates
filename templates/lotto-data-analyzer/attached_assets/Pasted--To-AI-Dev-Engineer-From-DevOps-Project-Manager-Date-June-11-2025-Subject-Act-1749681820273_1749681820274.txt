@@ -1,0 +1,40 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Action Required: Data Integrity and History Restoration - Phase 4
+
+**Objective:**
+This directive formally initiates **Phase 4: Data Integrity and History Restoration**. The primary objective is to resolve the known issue of missing prediction history in the application's UI. This will be accomplished by auditing the migrated data, implementing a new, appropriate data retrieval function, and updating the UI components to correctly display all historical predictions.
+
+**Context:**
+All preliminary analysis is now complete. The `Operational Readiness Report` confirmed that the Phase 3 migration script was designed to mark all historical predictions as active. However, the `As-Built` report shows that the current storage logic deactivates all but the most recent predictions. This conflict is the root cause of the UI issue. This phase will correct this by implementing the proper retrieval and display logic.
+
+**Required Tasks:**
+
+1.  **Data Migration Audit:**
+    * Before implementing new code, you must first audit the current state of the database. Write and execute a script to query the `model_predictions` table in `model_predictions.db`.
+    * Your script should verify that the historical predictions migrated from the legacy `prediction_history.joblib` file exist in the database.
+    * Document the `is_active` status of these migrated records to confirm our analysis.
+
+2.  **Implement Historical Prediction Retrieval Function:**
+    * In the `PersistentModelPredictionManager` class (`core/persistent_model_predictions.py`), create a new method named `get_historical_predictions_by_model`.
+    * This function must retrieve all predictions for a given `model_name` from the database, irrespective of their `is_active` status. The SQL query should **not** include a `WHERE is_active = TRUE` clause.
+    * The results should be ordered chronologically (most recent first).
+
+3.  **Update User Interface Components:**
+    * Identify the Streamlit UI components responsible for displaying the "Prediction History" and "Last 5 Predictions" lists.
+    * Modify these UI components to call the new `get_historical_predictions_by_model` function you created in Task 2, replacing the call to the old `get_current_predictions` function.
+    * Ensure the UI correctly displays the full, accurate history of predictions.
+
+**Deliverable:**
+Upon completion of all tasks, you are required to produce a formal **"Data & History Restoration Report"**. This report must detail the findings of your data audit, document the new data retrieval function, and include validation (screenshots) of the UI correctly displaying the historical prediction data.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: Data & History Restoration Report (Phase 4)
+Report Date: [Date of Completion]
+Analysis Scope: Audit of migrated data, implementation of historical prediction retrieval logic, and validation of UI updates.
+System Status: Stabilized - Prediction history functionality restored.
+Analyst: [Your Name/Identifier]
+```

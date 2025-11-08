@@ -1,0 +1,103 @@
+﻿{
+    "Summary":  {
+                    "Passed":  4,
+                    "Duration":  4562,
+                    "Failed":  1,
+                    "Total":  6,
+                    "Warnings":  0,
+                    "SuccessRate":  66.67
+                },
+    "Session":  {
+                    "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                    "Duration":  4562,
+                    "Timestamp":  "2025-07-25 19:07:07",
+                    "ProjectPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios",
+                    "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv"
+                },
+    "Results":  [
+                    {
+                        "Timestamp":  "2025-07-25 19:07:02.890",
+                        "Phase":  "Python Environment",
+                        "Component":  "SystemValidation",
+                        "Status":  "PASSED",
+                        "Message":  "Python environment validated",
+                        "Details":  "Version: 3.13.2",
+                        "Duration":  66,
+                        "Metadata":  {
+                                         "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                                         "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                                         "SessionDuration":  196
+                                     }
+                    },
+                    {
+                        "Timestamp":  "2025-07-25 19:07:02.926",
+                        "Phase":  "Python Environment",
+                        "Component":  "SystemValidation",
+                        "Status":  "INFO",
+                        "Message":  "Virtual environment detected",
+                        "Details":  "Path: C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                        "Duration":  92,
+                        "Metadata":  {
+                                         "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                                         "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                                         "SessionDuration":  217
+                                     }
+                    },
+                    {
+                        "Timestamp":  "2025-07-25 19:07:03.247",
+                        "Phase":  "Node.js Environment",
+                        "Component":  "SystemValidation",
+                        "Status":  "PASSED",
+                        "Message":  "Node.js environment validated",
+                        "Details":  "Node: v22.13.1, NPM: 10.9.2",
+                        "Duration":  309,
+                        "Metadata":  {
+                                         "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                                         "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                                         "SessionDuration":  537
+                                     }
+                    },
+                    {
+                        "Timestamp":  "2025-07-25 19:07:07.052",
+                        "Phase":  "Python Dependencies",
+                        "Component":  "SystemValidation",
+                        "Status":  "FAILED",
+                        "Message":  "Failed to parse dependency results",
+                        "Details":  "Invalid JSON primitive: .",
+                        "Duration":  3798,
+                        "Metadata":  {
+                                         "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                                         "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                                         "SessionDuration":  4343
+                                     }
+                    },
+                    {
+                        "Timestamp":  "2025-07-25 19:07:07.122",
+                        "Phase":  "Database Connectivity",
+                        "Component":  "SystemValidation",
+                        "Status":  "PASSED",
+                        "Message":  "Database connectivity verified",
+                        "Details":  "SUCCESS: Database connectivity verified",
+                        "Duration":  62,
+                        "Metadata":  {
+                                         "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                                         "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                                         "SessionDuration":  4413
+                                     }
+                    },
+                    {
+                        "Timestamp":  "2025-07-25 19:07:07.220",
+                        "Phase":  "Server Syntax Check",
+                        "Component":  "SystemValidation",
+                        "Status":  "PASSED",
+                        "Message":  "Server syntax validated",
+                        "Details":  "No syntax errors found",
+                        "Duration":  90,
+                        "Metadata":  {
+                                         "PythonExe":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+                                         "VenvPath":  "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+                                         "SessionDuration":  4510
+                                     }
+                    }
+                ]
+}

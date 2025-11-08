@@ -1,0 +1,16 @@
+# Powerball Insights - Requirements File
+# Core Data Science and Machine Learning
+pandas>=2.2.3
+scikit-learn>=1.6.1
+matplotlib>=3.10.3
+plotly>=6.0.1
+joblib>=1.5.0
+
+# Web Application Framework
+streamlit>=1.45.1
+
+# Web Scraping and Content Extraction
+trafilatura>=2.0.0
+
+# Python Version Requirement
+# Requires Python >=3.11

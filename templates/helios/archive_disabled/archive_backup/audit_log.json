@@ -1,0 +1,596 @@
+[
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.dockerignore",
+    "timestamp": "2025-09-01T15:10:58.801842",
+    "details": "Size: 546 bytes, Modified: 2025-07-14 08:21:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.env.development",
+    "timestamp": "2025-09-01T15:10:58.804791",
+    "details": "Size: 211 bytes, Modified: 2025-07-14 08:21:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.env.example",
+    "timestamp": "2025-09-01T15:10:58.806195",
+    "details": "Size: 497 bytes, Modified: 2025-07-20 15:40:54"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.env.local",
+    "timestamp": "2025-09-01T15:10:58.807134",
+    "details": "Size: 115 bytes, Modified: 2025-07-20 15:45:10"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.env.production",
+    "timestamp": "2025-09-01T15:10:58.807739",
+    "details": "Size: 217 bytes, Modified: 2025-07-14 08:21:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.gcloudignore",
+    "timestamp": "2025-09-01T15:10:58.808435",
+    "details": "Size: 2232 bytes, Modified: 2025-07-20 15:40:54"
+  },
+  {
+    "action": "KEPT",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.git",
+    "timestamp": "2025-09-01T15:10:58.808477",
+    "details": null
+  },
+  {
+    "action": "KEPT",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.gitattributes",
+    "timestamp": "2025-09-01T15:10:58.808495",
+    "details": null
+  },
+  {
+    "action": "KEPT",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.gitignore",
+    "timestamp": "2025-09-01T15:10:58.808509",
+    "details": null
+  },
+  {
+    "action": "KEPT",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.venv",
+    "timestamp": "2025-09-01T15:10:58.808522",
+    "details": null
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\.vscode",
+    "timestamp": "2025-09-01T15:10:58.809945",
+    "details": "Size: 0 bytes, Modified: 2025-07-21 18:25:12"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\activate-venv.bat",
+    "timestamp": "2025-09-01T15:10:58.810734",
+    "details": "Size: 256 bytes, Modified: 2025-07-14 08:50:43"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\activate-venv.ps1",
+    "timestamp": "2025-09-01T15:10:58.811994",
+    "details": "Size: 432 bytes, Modified: 2025-07-29 19:54:52"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\analyze_problems.py",
+    "timestamp": "2025-09-01T15:10:58.813226",
+    "details": "Size: 5616 bytes, Modified: 2025-07-21 18:37:16"
+  },
+  {
+    "action": "ERROR",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\archive",
+    "timestamp": "2025-09-01T15:10:58.814984",
+    "details": "Cannot move a directory 'C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\archive' into itself 'C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\archive\\archive'."
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\archive-frontend.ps1",
+    "timestamp": "2025-09-01T15:10:58.815939",
+    "details": "Size: 2646 bytes, Modified: 2025-09-01 14:54:48"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\archive-frontend.py",
+    "timestamp": "2025-09-01T15:10:58.817240",
+    "details": "Size: 3280 bytes, Modified: 2025-09-01 15:10:06"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\backend",
+    "timestamp": "2025-09-01T15:10:58.831743",
+    "details": "Size: 8192 bytes, Modified: 2025-08-22 22:23:13"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\backups",
+    "timestamp": "2025-09-01T15:10:58.833577",
+    "details": "Size: 4096 bytes, Modified: 2025-07-28 15:53:42"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\books",
+    "timestamp": "2025-09-01T15:10:58.834417",
+    "details": "Size: 4096 bytes, Modified: 2025-08-01 14:24:42"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\browser-test.js",
+    "timestamp": "2025-09-01T15:10:58.835906",
+    "details": "Size: 2260 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\build-with-api-key.ps1",
+    "timestamp": "2025-09-01T15:10:58.836810",
+    "details": "Size: 2472 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\build-with-api-key.sh",
+    "timestamp": "2025-09-01T15:10:58.837643",
+    "details": "Size: 1365 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\components",
+    "timestamp": "2025-09-01T15:10:58.838655",
+    "details": "Size: 4096 bytes, Modified: 2025-08-29 22:03:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\comprehensive_function_fix.py",
+    "timestamp": "2025-09-01T15:10:58.839403",
+    "details": "Size: 4501 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\COMPREHENSIVE_SYSTEM_ARCHITECTURE_REPORT.md",
+    "timestamp": "2025-09-01T15:10:58.840524",
+    "details": "Size: 31574 bytes, Modified: 2025-08-17 16:28:24"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\debug_tensor_shapes.py",
+    "timestamp": "2025-09-01T15:10:58.841886",
+    "details": "Size: 2906 bytes, Modified: 2025-08-04 06:58:57"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\debug_training_pipeline.py",
+    "timestamp": "2025-09-01T15:10:58.843461",
+    "details": "Size: 6628 bytes, Modified: 2025-07-25 13:45:39"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\dependency_diag.log",
+    "timestamp": "2025-09-01T15:10:58.844303",
+    "details": "Size: 2096 bytes, Modified: 2025-07-25 16:56:49"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\dependency_report.json",
+    "timestamp": "2025-09-01T15:10:58.845553",
+    "details": "Size: 5159 bytes, Modified: 2025-07-25 16:56:49"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\dist",
+    "timestamp": "2025-09-01T15:10:58.846819",
+    "details": "Size: 0 bytes, Modified: 2025-08-17 22:17:55"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\docker-compose.yml",
+    "timestamp": "2025-09-01T15:10:58.847807",
+    "details": "Size: 2841 bytes, Modified: 2025-07-25 12:52:17"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\docker-manage.bat",
+    "timestamp": "2025-09-01T15:10:58.848758",
+    "details": "Size: 4071 bytes, Modified: 2025-07-14 08:21:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\docker-manage.sh",
+    "timestamp": "2025-09-01T15:10:58.849663",
+    "details": "Size: 5546 bytes, Modified: 2025-07-14 08:21:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\Dockerfile",
+    "timestamp": "2025-09-01T15:10:58.850710",
+    "details": "Size: 3306 bytes, Modified: 2025-07-23 20:30:47"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\Dockerfile.dev",
+    "timestamp": "2025-09-01T15:10:58.851786",
+    "details": "Size: 652 bytes, Modified: 2025-07-19 11:18:31"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\ErrorReports.txt",
+    "timestamp": "2025-09-01T15:10:58.852632",
+    "details": "Size: 3003 bytes, Modified: 2025-07-16 08:13:40"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\error_flag.txt",
+    "timestamp": "2025-09-01T15:10:58.853893",
+    "details": "Size: 87 bytes, Modified: 2025-08-22 22:33:43"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\fix_remaining_functions.py",
+    "timestamp": "2025-09-01T15:10:58.855044",
+    "details": "Size: 4868 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\fix_truncated_functions.py",
+    "timestamp": "2025-09-01T15:10:58.856136",
+    "details": "Size: 8946 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\focused_code_test.py",
+    "timestamp": "2025-09-01T15:10:58.856886",
+    "details": "Size: 15066 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\helios_compatible_powerball.csv",
+    "timestamp": "2025-09-01T15:10:58.857697",
+    "details": "Size: 35855 bytes, Modified: 2025-08-20 18:27:47"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\helios_compatible_powerball_aug2025.csv",
+    "timestamp": "2025-09-01T15:10:58.858494",
+    "details": "Size: 36835 bytes, Modified: 2025-08-21 07:32:09"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\helios_memory.db",
+    "timestamp": "2025-09-01T15:10:58.859385",
+    "details": "Size: 69632 bytes, Modified: 2025-08-16 22:29:00"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\helios_path_analysis.csv",
+    "timestamp": "2025-09-01T15:10:58.860507",
+    "details": "Size: 9691 bytes, Modified: 2025-07-25 17:15:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\helios_path_analysis.json",
+    "timestamp": "2025-09-01T15:10:58.861592",
+    "details": "Size: 18192 bytes, Modified: 2025-07-25 17:15:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\INTEGRATION_TEST_FIX_SUMMARY.md",
+    "timestamp": "2025-09-01T15:10:58.862531",
+    "details": "Size: 0 bytes, Modified: 2025-07-28 16:10:13"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\logs",
+    "timestamp": "2025-09-01T15:10:58.863753",
+    "details": "Size: 4096 bytes, Modified: 2025-08-22 22:18:14"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\metadata.json",
+    "timestamp": "2025-09-01T15:10:58.864956",
+    "details": "Size: 243 bytes, Modified: 2025-07-13 15:55:07"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\Missing_Components.txt",
+    "timestamp": "2025-09-01T15:10:58.865752",
+    "details": "Size: 17128 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\mock_mode_test_report.json",
+    "timestamp": "2025-09-01T15:10:58.866626",
+    "details": "Size: 3611 bytes, Modified: 2025-07-25 14:36:47"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\models",
+    "timestamp": "2025-09-01T15:10:58.867567",
+    "details": "Size: 4096 bytes, Modified: 2025-08-16 22:29:00"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\monitor_training.py",
+    "timestamp": "2025-09-01T15:10:58.868395",
+    "details": "Size: 3198 bytes, Modified: 2025-08-21 08:26:32"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\nginx.conf",
+    "timestamp": "2025-09-01T15:10:58.869687",
+    "details": "Size: 1477 bytes, Modified: 2025-07-14 08:21:33"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\NPM Enviroment Startup.txt",
+    "timestamp": "2025-09-01T15:10:58.870578",
+    "details": "Size: 928 bytes, Modified: 2025-07-25 17:16:09"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\package-lock.json",
+    "timestamp": "2025-09-01T15:10:58.871727",
+    "details": "Size: 127946 bytes, Modified: 2025-07-21 20:34:57"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\Post-Refactoring_Test.txt",
+    "timestamp": "2025-09-01T15:10:58.872495",
+    "details": "Size: 2851 bytes, Modified: 2025-07-21 18:40:34"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\powerball_data_2025.csv",
+    "timestamp": "2025-09-01T15:10:58.873467",
+    "details": "Size: 2949 bytes, Modified: 2025-08-20 18:26:59"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\PRD_Missing_Memory.txt",
+    "timestamp": "2025-09-01T15:10:58.874356",
+    "details": "Size: 8490 bytes, Modified: 2025-07-14 10:48:45"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\problems-analysis.json",
+    "timestamp": "2025-09-01T15:10:58.875192",
+    "details": "Size: 2332824 bytes, Modified: 2025-07-20 19:36:01"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\problems.json",
+    "timestamp": "2025-09-01T15:10:58.875897",
+    "details": "Size: 906804 bytes, Modified: 2025-07-20 19:33:27"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\problems.txt",
+    "timestamp": "2025-09-01T15:10:58.876675",
+    "details": "Size: 232902 bytes, Modified: 2025-07-20 19:31:36"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\production-check.ps1",
+    "timestamp": "2025-09-01T15:10:58.878794",
+    "details": "Size: 3118 bytes, Modified: 2025-07-30 22:38:29"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\real_powerball_data.csv",
+    "timestamp": "2025-09-01T15:10:58.879630",
+    "details": "Size: 35803 bytes, Modified: 2025-07-23 21:47:20"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\schematic.md",
+    "timestamp": "2025-09-01T15:10:58.880815",
+    "details": "Size: 0 bytes, Modified: 2025-07-28 15:53:42"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\seconderror.txt",
+    "timestamp": "2025-09-01T15:10:58.881941",
+    "details": "Size: 45 bytes, Modified: 2025-07-16 10:05:55"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\services",
+    "timestamp": "2025-09-01T15:10:58.883097",
+    "details": "Size: 0 bytes, Modified: 2025-07-14 08:06:55"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\setup-venv.bat",
+    "timestamp": "2025-09-01T15:10:58.883816",
+    "details": "Size: 3931 bytes, Modified: 2025-07-21 18:40:35"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\setup-venv.ps1",
+    "timestamp": "2025-09-01T15:10:58.884646",
+    "details": "Size: 6800 bytes, Modified: 2025-07-21 18:40:35"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\setup-venv.sh",
+    "timestamp": "2025-09-01T15:10:58.885454",
+    "details": "Size: 5002 bytes, Modified: 2025-07-21 18:40:35"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\simple_syntax_check.py",
+    "timestamp": "2025-09-01T15:10:58.898098",
+    "details": "Size: 1382 bytes, Modified: 2025-07-15 15:55:32"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\source.tar.gz",
+    "timestamp": "2025-09-01T15:10:58.900003",
+    "details": "Size: 876488241 bytes, Modified: 2025-07-19 22:10:47"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\source.zip",
+    "timestamp": "2025-09-01T15:10:58.901374",
+    "details": "Size: 447951191 bytes, Modified: 2025-07-19 18:02:06"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\src",
+    "timestamp": "2025-09-01T15:10:58.903770",
+    "details": "Size: 0 bytes, Modified: 2025-07-21 20:42:03"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start-helios.ps1",
+    "timestamp": "2025-09-01T15:10:58.904985",
+    "details": "Size: 0 bytes, Modified: 2025-08-18 14:29:49"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start-server-clean.ps1",
+    "timestamp": "2025-09-01T15:10:58.905762",
+    "details": "Size: 2374 bytes, Modified: 2025-08-04 21:57:17"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start-server.sh",
+    "timestamp": "2025-09-01T15:10:58.906681",
+    "details": "Size: 509 bytes, Modified: 2025-07-21 18:40:35"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_aug2025_stable_training.py",
+    "timestamp": "2025-09-01T15:10:58.907908",
+    "details": "Size: 2590 bytes, Modified: 2025-08-21 08:21:18"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_aug2025_training.py",
+    "timestamp": "2025-09-01T15:10:58.909118",
+    "details": "Size: 2434 bytes, Modified: 2025-08-21 08:00:43"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_training.json",
+    "timestamp": "2025-09-01T15:10:58.910088",
+    "details": "Size: 244 bytes, Modified: 2025-08-20 18:28:03"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_training_aug2025_enhanced.json",
+    "timestamp": "2025-09-01T15:10:58.910979",
+    "details": "Size: 364 bytes, Modified: 2025-08-21 08:16:20"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_training_aug2025_proven.json",
+    "timestamp": "2025-09-01T15:10:58.911881",
+    "details": "Size: 355 bytes, Modified: 2025-08-21 08:22:38"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_training_aug2025_stable.json",
+    "timestamp": "2025-09-01T15:10:58.913017",
+    "details": "Size: 351 bytes, Modified: 2025-08-21 08:21:18"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\start_training_gpu_optimized.json",
+    "timestamp": "2025-09-01T15:10:58.914597",
+    "details": "Size: 371 bytes, Modified: 2025-08-21 06:30:16"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\stress-test.sh",
+    "timestamp": "2025-09-01T15:10:58.915727",
+    "details": "Size: 10164 bytes, Modified: 2025-07-21 18:40:35"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\structure_20250719_114244.txt",
+    "timestamp": "2025-09-01T15:10:58.917201",
+    "details": "Size: 18783434 bytes, Modified: 2025-07-19 11:43:05"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\Subject Action Required Bug Fixes a.txt",
+    "timestamp": "2025-09-01T15:10:58.918271",
+    "details": "Size: 1718 bytes, Modified: 2025-07-16 10:05:20"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\system-check.ps1",
+    "timestamp": "2025-09-01T15:10:58.929881",
+    "details": "Size: 4000 bytes, Modified: 2025-07-20 20:01:36"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\test-system-components.ps1",
+    "timestamp": "2025-09-01T15:10:58.931407",
+    "details": "Size: 33423 bytes, Modified: 2025-07-25 19:32:36"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\tests",
+    "timestamp": "2025-09-01T15:10:58.932967",
+    "details": "Size: 4096 bytes, Modified: 2025-07-14 09:07:15"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\test_code_quality.py",
+    "timestamp": "2025-09-01T15:10:58.934065",
+    "details": "Size: 18436 bytes, Modified: 2025-07-21 18:40:35"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\test_training_error.py",
+    "timestamp": "2025-09-01T15:10:58.935052",
+    "details": "Size: 1001 bytes, Modified: 2025-08-04 07:01:46"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\tools",
+    "timestamp": "2025-09-01T15:10:58.936451",
+    "details": "Size: 4096 bytes, Modified: 2025-07-25 17:16:31"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\training_log.txt",
+    "timestamp": "2025-09-01T15:10:58.937263",
+    "details": "Size: 15881 bytes, Modified: 2025-08-22 22:33:43"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\TRAINING_WORKFLOW_WITH_VERIFICATION.md",
+    "timestamp": "2025-09-01T15:10:58.938108",
+    "details": "Size: 3961 bytes, Modified: 2025-08-22 22:34:39"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\validate-launch.ps1",
+    "timestamp": "2025-09-01T15:10:58.939310",
+    "details": "Size: 0 bytes, Modified: 2025-07-30 21:36:59"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\validation-results_2025-07-25_19-07-07.json",
+    "timestamp": "2025-09-01T15:10:58.940481",
+    "details": "Size: 5820 bytes, Modified: 2025-07-25 19:07:07"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\validation-results_2025-07-25_19-33-36.json",
+    "timestamp": "2025-09-01T15:10:58.941431",
+    "details": "Size: 8300 bytes, Modified: 2025-07-25 19:33:36"
+  },
+  {
+    "action": "MOVED",
+    "path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\Watchdog.ps1",
+    "timestamp": "2025-09-01T15:10:58.942109",
+    "details": "Size: 1117 bytes, Modified: 2025-08-22 18:48:54"
+  }
+]

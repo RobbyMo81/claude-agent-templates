@@ -1,0 +1,13 @@
+2025-08-23 00:18:17,726 - INFO - Epoch 0: Train Loss = 7.5445, Val Loss = 7.5312
+2025-08-23 00:18:18,459 - INFO - Epoch 1: Train Loss = 7.5238, Val Loss = 7.5289
+2025-08-23 00:18:19,131 - INFO - Epoch 2: Train Loss = 7.5068, Val Loss = 7.5313
+2025-08-23 00:18:19,809 - INFO - Epoch 3: Train Loss = 7.4928, Val Loss = 7.5239
+2025-08-23 00:18:20,566 - INFO - Epoch 4: Train Loss = 7.4805, Val Loss = 7.5297
+2025-08-23 00:18:21,256 - INFO - Epoch 5: Train Loss = 7.4620, Val Loss = 7.5397
+2025-08-23 00:18:21,980 - INFO - Epoch 6: Train Loss = 7.4396, Val Loss = 7.5237
+2025-08-23 00:18:22,693 - INFO - Epoch 7: Train Loss = 7.3897, Val Loss = 7.5518
+2025-08-23 00:18:23,455 - INFO - Epoch 8: Train Loss = 7.3344, Val Loss = 7.6233
+2025-08-23 00:18:24,128 - INFO - Epoch 9: Train Loss = 7.2638, Val Loss = 7.7245
+2025-08-23 00:18:24,766 - INFO - Epoch 10: Train Loss = 7.2327, Val Loss = 7.6757
+2025-08-23 00:18:25,475 - INFO - Epoch 11: Train Loss = 7.1908, Val Loss = 7.7623
+2025-08-23 00:18:25,475 - ERROR - Error: Early stopping triggered at epoch 12, best val loss: 7.5237

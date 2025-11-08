@@ -1,0 +1,107 @@
+{
+  "timestamp": "2025-07-25T16:56:45.081081",
+  "python_env": {
+    "python_version": "3.13.2",
+    "python_implementation": "CPython",
+    "executable_path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts\\python.exe",
+    "virtual_env_active": true,
+    "virtual_env_path": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "architecture": "64bit",
+    "sys_path_entries": 7,
+    "working_directory": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios"
+  },
+  "path_issues": {
+    "suspicious_dirs": [],
+    "sys_path_issues": [],
+    "cwd": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios"
+  },
+  "import_tests": {
+    "numpy": {
+      "status": "success",
+      "version": "2.3.2",
+      "location": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "error": null
+    },
+    "torch": {
+      "status": "success",
+      "version": "2.7.1+cpu",
+      "location": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Lib\\site-packages\\torch\\__init__.py",
+      "error": null
+    },
+    "sklearn": {
+      "status": "success",
+      "version": "1.7.1",
+      "location": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Lib\\site-packages\\sklearn\\__init__.py",
+      "error": null
+    },
+    "pandas": {
+      "status": "success",
+      "version": "2.3.1",
+      "location": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Lib\\site-packages\\pandas\\__init__.py",
+      "error": null
+    },
+    "matplotlib": {
+      "status": "failed",
+      "version": null,
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'matplotlib'"
+    },
+    "scipy": {
+      "status": "success",
+      "version": "1.16.0",
+      "location": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Lib\\site-packages\\scipy\\__init__.py",
+      "error": null
+    },
+    "torchvision": {
+      "status": "failed",
+      "version": null,
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'torchvision'"
+    }
+  },
+  "env_vars": {
+    "PYTHONPATH": "Not Set",
+    "VIRTUAL_ENV": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv",
+    "PATH": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\venv\\Scripts;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.8\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.8\\libnvvp;C:\\Users\\RobMo\\dev\\tools\\Scripts\\;C:\\Users\\RobMo\\dev\\tools\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA app\\NvDLISR;C:\\Users\\RobMo\\dev\\tools\\Git\\cmd;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Users\\RobMo\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\;C:\\Users\\RobMo\\AppData\\Local\\Programs\\Python\\Python312\\;C:\\Users\\RobMo\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\RobMo\\.lmstudio\\bin;C:\\Users\\RobMo\\dev\\tools\\Microsoft VS Code\\bin;C:\\Users\\RobMo\\dev\\tools\\Git\\bin;C:\\Users\\RobMo\\dev\\tools\\Git\\cmd;C:\\Users\\RobMo\\AppData\\Roaming\\npm;C:\\Users\\RobMo\\AppData\\Roaming\\Python\\Python313\\Scripts;C:\\Users\\RobMo\\AppData\\Local\\Programs\\Ollama;C:\\Users\\RobMo\\dev\\tools;C:\\Users\\RobMo\\dev\\Microsoft VS Code\\bin;C:\\Users\\RobMo\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin;C:\\Users\\RobMo\\.dotnet\\tools;c:\\Users\\RobMo\\.vscode\\extensions\\ms-python.debugpy-2025.10.0-win32-x64\\bundled\\scripts\\noConfigScripts;c:\\Users\\RobMo\\AppData\\Roaming\\Code\\User\\globalStorage\\github.copilot-chat\\debugCommand",
+    "PYTHONIOENCODING": "Not Set",
+    "CONDA_DEFAULT_ENV": "Not Set",
+    "CONDA_PREFIX": "Not Set",
+    "PIP_PREFIX": "Not Set"
+  },
+  "helios_modules": {
+    "agent": {
+      "status": "failed",
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'agent'"
+    },
+    "trainer": {
+      "status": "failed",
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'trainer'"
+    },
+    "memory_store": {
+      "status": "failed",
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'memory_store'"
+    },
+    "metacognition": {
+      "status": "failed",
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'metacognition'"
+    },
+    "decision_engine": {
+      "status": "failed",
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'decision_engine'"
+    },
+    "cross_model_analytics": {
+      "status": "failed",
+      "location": null,
+      "error": "ModuleNotFoundError: No module named 'cross_model_analytics'"
+    }
+  },
+  "recommendations": [
+    "Install missing ML dependencies: matplotlib, torchvision"
+  ]
+}

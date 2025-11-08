@@ -1,0 +1,23 @@
+{
+  "model_type": "gradient_boosting",
+  "timestamp": "2025-06-05T13:52:17.571509",
+  "hyperparameters": {
+    "n_estimators": 100,
+    "learning_rate": 0.1
+  },
+  "performance_metrics": {
+    "cv_mae_mean": 7.926128093457026,
+    "cv_mae_std": 0.12202644278563944,
+    "cv_score_best": 7.740471589263257,
+    "cv_score_worst": 8.079330249488999
+  },
+  "model_artifact_id": "data/ml_memory/models/gradient_boosting_gradient_boosting_20250605_135203.joblib",
+  "training_duration_seconds": 14.373024,
+  "dataset_info": {
+    "total_draws": 2303,
+    "date_range": "1999-12-29 to 2025-06-04",
+    "features_count": 11
+  },
+  "success": true,
+  "notes": "Training completed with 2303 draws using 11 features"
+}

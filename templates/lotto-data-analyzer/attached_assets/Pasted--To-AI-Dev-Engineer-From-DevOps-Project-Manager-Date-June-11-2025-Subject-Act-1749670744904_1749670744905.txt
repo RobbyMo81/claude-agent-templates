@@ -1,0 +1,38 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Action Required: Project Architectural Consolidation - Phase 2
+
+**Objective:**
+This directive formally initiates **Phase 2: Architectural Consolidation**. With the system now stabilized after the successful completion of Phase 1, your objective is to refactor the core ML architecture. You will eliminate redundant code and fragmented pipelines by creating unified, standalone services for feature engineering and model training, as outlined in the `ML_MODEL_STORAGE_PREDICTION_ANALYSIS_REPORT.md`.
+
+**Context:**
+The analysis report identified significant technical debt due to duplicated feature engineering logic and three separate model training pipelines. The successful completion of Phase 1 has resolved all critical storage and API errors, providing a stable foundation for this deeper refactoring work. Your work will focus on implementing the "Priority 2 - Architecture Consolidation" items detailed in Section 9.2 of the analysis report. The target is the unified architecture described in Section 8.1 of that same report.
+
+**Required Tasks:**
+
+1.  **Centralize Feature Engineering:**
+    * Create a new, standalone `FeatureEngineeringService`.
+    * Migrate all common feature engineering logic into this service. This includes, but is not limited to, Frequency Analysis, Recency Features, Temporal Features, and Statistical Features, which are currently duplicated across multiple modules.
+    * Refactor the existing systems (`LegacyPredictionSystem`, `ModernizedPredictionSystem`, and `MLExperimental`) to remove their internal feature engineering logic. These systems must now call the new, shared `FeatureEngineeringService` to obtain features.
+
+2.  **Unify the Model Training Pipeline:**
+    * Create a new, unified `ModelTrainingService` that consolidates the separate training logic from the legacy, modern, and experimental systems.
+    * This service must implement a single, standardized cross-validation framework using `TimeSeriesSplit`.
+    * It must standardize the collection of performance metrics (e.g., Mean Absolute Error).
+    * The service must interface *exclusively* with the `UnifiedMLStorage` interface that was stabilized in Phase 1 to persist all model metadata and performance metrics to the SQLite database. All legacy `joblib` persistence must be fully removed from the training pipeline.
+
+**Deliverable:**
+Upon completion of the refactoring, you are required to produce a formal **"Architectural Consolidation Report"**. This report must detail the new service-oriented architecture, document the API of the new services (`FeatureEngineeringService`, `ModelTrainingService`), and provide validation results demonstrating that the consolidated systems perform correctly and produce results consistent with the previous pipelines.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: Architectural Consolidation Report (Phase 2)
+Report Date: [Date of Completion]
+Analysis Scope: Refactoring and consolidation of feature engineering and model training pipelines into a unified, service-oriented architecture.
+System Status: Consolidated - Redundant pipelines eliminated. Ready for Phase 3 legacy data migration.
+Analyst: [Your Name/Identifier]
+```
+
+This report will serve as the official documentation that Phase 2 is complete, which is the prerequisite for beginning the final data migration and legacy deprecation in Phase 3.

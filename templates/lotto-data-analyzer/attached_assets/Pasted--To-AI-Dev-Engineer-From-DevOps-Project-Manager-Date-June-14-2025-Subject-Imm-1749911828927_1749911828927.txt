@@ -1,0 +1,38 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 14, 2025
+**Subject:** Immediate and Mandatory Action Required: Legacy Data Migration and Validation
+
+**Objective:**
+This directive is to address a critical system deficiency: the incomplete migration of legacy data. Your sole and immediate task is to develop and execute a robust process to migrate all historical prediction data from the legacy `.joblib` files into the unified SQLite database. This task is considered a blocker for all future development.
+
+**Context:**
+The `DATA_HISTORY_RESTORATION_REPORT_PHASE_4` has definitively confirmed that the current `model_predictions.db` database **does not contain the historical data from the legacy system**. This is a critical failure of the initial migration attempt. The `OPERATIONAL_READINESS_REPORT` contains a well-architected migration script (`legacy_data_migration.py`) that must be used as the primary reference for the correct migration logic. This task must be executed with precision to ensure zero data loss and complete data integrity.
+
+**Required Tasks - No Deviations Permitted:**
+
+1.  **Develop Migration Script:** You will develop a new, standalone Python script for this migration. You must reference the logic within the `legacy_data_migration.py` script provided in previous reports, as it contains the correct data mapping and transformation procedures.
+
+2.  **Mandatory Pre-Migration Backup:** Before any execution, you **must** create a complete, timestamped backup of the entire `data/` directory. This is a non-negotiable safety protocol.
+
+3.  **Execute Data Migration:** Run the developed script to populate the SQLite database with the historical prediction data from `data/prediction_history.joblib` and `data/prediction_models.joblib`. **Crucially, all migrated records must be inserted with their `is_active` and `is_current` flags set to `FALSE`** to ensure they are treated as historical archives and do not interfere with new, active predictions.
+
+4.  **Develop a Separate Validation Script:** You will create a new, standalone validation script that must be run *after* the migration is complete. This script must programmatically verify the success of the migration and **must** include the following checks:
+    * A count of total records in the legacy `.joblib` file compared against the count of newly inserted records in the SQLite database.
+    * A direct comparison of at least 10 specific, randomly sampled prediction records, verifying that the data from the `.joblib` file exists and is correctly formatted in the SQLite table.
+    * A query that confirms **all** migrated records have their `is_active` flag set to `FALSE`.
+
+5.  **Conditional Legacy File Cleanup:** The legacy `.joblib` files and `ml_memory/` directory may **only** be deleted after the validation script from Task 4 runs successfully and all its checks pass without error.
+
+**Deliverable:**
+Upon completion of all tasks, you must produce a formal **"Legacy Data Migration & Validation Report"**. This report is non-negotiable and must contain the full source code for both the migration script and the validation script, along with the output logs from both scripts proving the migration and validation were successful.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: Legacy Data Migration & Validation Report
+Report Date: [Date of Completion]
+Analysis Scope: Execution and cryptographic validation of data migration from legacy joblib files to the unified SQLite database.
+System Status: Corrected - Historical data integrity verified. All legacy data migrated.
+Analyst: [Your Name/Identifier]
+```

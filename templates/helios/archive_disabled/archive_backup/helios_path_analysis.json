@@ -1,0 +1,413 @@
+{
+  "timestamp": "2025-07-25T17:15:34.807182",
+  "search_root": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios",
+  "statistics": {
+    "files_scanned": 143,
+    "files_skipped": 0,
+    "total_matches": 50,
+    "critical_issues": 3,
+    "warnings": 8
+  },
+  "matches": [
+    {
+      "file_path": "dependency_report.json",
+      "line_number": 66,
+      "line_content": "\"PATH\": \"C:\\\\Users\\\\RobMo\\\\OneDrive\\\\Documents\\\\helios\\\\venv\\\\Scripts;C:\\\\Program Files\\\\NVIDIA GPU Computing Toolkit\\\\CUDA\\\\v12.8\\\\bin;C:\\\\Program Files\\\\NVIDIA GPU Computing Toolkit\\\\CUDA\\\\v12.8\\\\libnvvp;C:\\\\Users\\\\RobMo\\\\dev\\\\tools\\\\Scripts\\\\;C:\\\\Users\\\\RobMo\\\\dev\\\\tools\\\\;C:\\\\Windows\\\\system32;C:\\\\Windows;C:\\\\Windows\\\\System32\\\\Wbem;C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\;C:\\\\Windows\\\\System32\\\\OpenSSH\\\\;C:\\\\Program Files\\\\dotnet\\\\;C:\\\\Program Files (x86)\\\\NVIDIA Corporation\\\\PhysX\\\\Common;C:\\\\Program Files\\\\NVIDIA Corporation\\\\NVIDIA NvDLISR;C:\\\\ProgramData\\\\chocolatey\\\\bin;C:\\\\Program Files\\\\NVIDIA Corporation\\\\Nsight Compute 2025.1.0\\\\;C:\\\\Program Files\\\\NVIDIA Corporation\\\\NVIDIA app\\\\NvDLISR;C:\\\\Users\\\\RobMo\\\\dev\\\\tools\\\\Git\\\\cmd;C:\\\\Program Files\\\\Docker\\\\Docker\\\\resources\\\\bin;C:\\\\Users\\\\RobMo\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\Scripts\\\\;C:\\\\Users\\\\RobMo\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\;C:\\\\Users\\\\RobMo\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps;C:\\\\Users\\\\RobMo\\\\.lmstudio\\\\bin;C:\\\\Users\\\\RobMo\\\\dev\\\\tools\\\\Microsoft VS Code\\\\bin;C:\\\\Users\\\\RobMo\\\\dev\\\\tools\\\\Git\\\\bin;C:\\\\Users\\\\RobMo\\\\dev\\\\tools\\\\Git\\\\cmd;C:\\\\Users\\\\RobMo\\\\AppData\\\\Roaming\\\\npm;C:\\\\Users\\\\RobMo\\\\AppData\\\\Roaming\\\\Python\\\\Python313\\\\Scripts;C:\\\\Users\\\\RobMo\\\\AppData\\\\Local\\\\Programs\\\\Ollama;C:\\\\Users\\\\RobMo\\\\dev\\\\tools;C:\\\\Users\\\\RobMo\\\\dev\\\\Microsoft VS Code\\\\bin;C:\\\\Users\\\\RobMo\\\\AppData\\\\Local\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin;C:\\\\Users\\\\RobMo\\\\.dotnet\\\\tools;c:\\\\Users\\\\RobMo\\\\.vscode\\\\extensions\\\\ms-python.debugpy-2025.10.0-win32-x64\\\\bundled\\\\scripts\\\\noConfigScripts;c:\\\\Users\\\\RobMo\\\\AppData\\\\Roaming\\\\Code\\\\User\\\\globalStorage\\\\github.copilot-chat\\\\debugCommand\",",
+      "match_type": "vscode_settings",
+      "severity": "INFO",
+      "suggested_fix": "Verify VS Code settings consistency"
+    },
+    {
+      "file_path": "DEVELOPMENT_ISSUES_RESOLVED.md",
+      "line_number": 92,
+      "line_content": "\"python.defaultInterpreterPath\": \"./backend/venv/Scripts/python.exe\",",
+      "match_type": "backend_venv",
+      "severity": "CRITICAL",
+      "suggested_fix": "Replace with root-level venv path"
+    },
+    {
+      "file_path": "DEVELOPMENT_ISSUES_RESOLVED.md",
+      "line_number": 92,
+      "line_content": "\"python.defaultInterpreterPath\": \"./backend/venv/Scripts/python.exe\",",
+      "match_type": "python_exe_backend",
+      "severity": "CRITICAL",
+      "suggested_fix": "Update to venv/Scripts/python.exe"
+    },
+    {
+      "file_path": "DEVELOPMENT_ISSUES_RESOLVED.md",
+      "line_number": 104,
+      "line_content": "2. **`.vscode/settings.json`**",
+      "match_type": "vscode_settings",
+      "severity": "INFO",
+      "suggested_fix": "Verify VS Code settings consistency"
+    },
+    {
+      "file_path": "docker-compose.yml",
+      "line_number": 16,
+      "line_content": "- backend_logs:/app/logs",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "docker-compose.yml",
+      "line_number": 37,
+      "line_content": "- backend_logs:/app/logs",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "docker-compose.yml",
+      "line_number": 81,
+      "line_content": "- /app/node_modules",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "ErrorReports.txt",
+      "line_number": 53,
+      "line_content": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\backend\\Dockerfile",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "ErrorReports.txt",
+      "line_number": 58,
+      "line_content": "C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\components\\TrainingProgress.tsx",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "GEMINI_API_SETUP.md",
+      "line_number": 6,
+      "line_content": "1. Visit: https://aistudio.google.com/app/apikey",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "NPM Enviroment Startup.txt",
+      "line_number": 2,
+      "line_content": "pip 25.1.1 from C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\backend\\venv\\Lib\\site-packages\\pip (python 3.13)",
+      "match_type": "backend_venv",
+      "severity": "CRITICAL",
+      "suggested_fix": "Replace with root-level venv path"
+    },
+    {
+      "file_path": "NPM Enviroment Startup.txt",
+      "line_number": 2,
+      "line_content": "pip 25.1.1 from C:\\Users\\RobMo\\OneDrive\\Documents\\helios\\backend\\venv\\Lib\\site-packages\\pip (python 3.13)",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "PYTHON_VENV_SETUP.md",
+      "line_number": 10,
+      "line_content": "cd c:\\Users\\RobMo\\OneDrive\\Documents\\helios",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "PYTHON_VENV_SETUP.md",
+      "line_number": 19,
+      "line_content": "cd c:\\Users\\RobMo\\OneDrive\\Documents\\helios",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "start-helios.ps1",
+      "line_number": 13,
+      "line_content": "exactly like the Docker container serves from /app/static.",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-helios.ps1",
+      "line_number": 38,
+      "line_content": "Write-Host \" Static Files: dist/ -> server.py static_folder (like Docker /app/static)\" -ForegroundColor White",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-helios.ps1",
+      "line_number": 58,
+      "line_content": "Write-Host \"  This mirrors Docker: COPY --from=frontend-builder /app/dist /app/static\" -ForegroundColor Gray",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-helios.ps1",
+      "line_number": 78,
+      "line_content": "Write-Host \"  Flask app serves static files from dist/ (like Docker /app/static)\" -ForegroundColor White",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server-clean.ps1",
+      "line_number": 20,
+      "line_content": "Write-Host \"Static files location: ../dist (mirrors Docker /app/static)\" -ForegroundColor White",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server-clean.ps1",
+      "line_number": 25,
+      "line_content": "# Change to backend directory (mirrors Docker WORKDIR /app/backend)",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server.ps1",
+      "line_number": 20,
+      "line_content": "Write-Host \"Static files location: ../dist (mirrors Docker /app/static)\" -ForegroundColor White",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server.ps1",
+      "line_number": 25,
+      "line_content": "# Change to backend directory (mirrors Docker WORKDIR /app/backend)",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server.sh",
+      "line_number": 3,
+      "line_content": "echo \" Static files location: /app/static\"",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server.sh",
+      "line_number": 4,
+      "line_content": "echo \" Backend location: /app/backend\"",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "start-server.sh",
+      "line_number": 7,
+      "line_content": "cd /app/backend",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "STARTUP_SUCCESS.md",
+      "line_number": 52,
+      "line_content": "Added tasks in `.vscode/tasks.json`:",
+      "match_type": "vscode_settings",
+      "severity": "INFO",
+      "suggested_fix": "Verify VS Code settings consistency"
+    },
+    {
+      "file_path": "SYSTEM_SCHEMA.md",
+      "line_number": 213,
+      "line_content": ".vscode/                      # VS Code configuration",
+      "match_type": "vscode_settings",
+      "severity": "INFO",
+      "suggested_fix": "Verify VS Code settings consistency"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 21,
+      "line_content": "- **Stage 1**: Builds React frontend into static files (`/app/static`)",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 22,
+      "line_content": "- **Stage 2**: Python environment with Flask backend (`/app/backend`)",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 31,
+      "line_content": "/app/",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 60,
+      "line_content": "# ... builds React app to /app/dist",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 70,
+      "line_content": "- **Modified app creation**: `Flask(__name__, static_folder='/app/static')`",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 80,
+      "line_content": "cd /app/backend",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 95,
+      "line_content": "- `GET /assets/main.js` → Flask serves from `/app/static/assets/`",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 124,
+      "line_content": "Your trained models and SQLite database (`helios_memory.db`) will be created in the persistent volume mounted at `/app/data/`. Configure Cloud Run with:",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_DEPLOYMENT_READY.md",
+      "line_number": 128,
+      "line_content": "--add-volume-mount volume=helios-data,mount-path=/app/data",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 10,
+      "line_content": "- **Dockerfile Stage 2**: Python production container copies `dist/` to `/app/static`",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 29,
+      "line_content": "# Mirrors: COPY --from=frontend-builder /app/dist /app/static",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 32,
+      "line_content": "# Mirrors: CMD [\"/app/start-server.sh\"]",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 39,
+      "line_content": "if os.path.exists('/app/static'):",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 41,
+      "line_content": "static_folder_path = '/app/static'",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 89,
+      "line_content": "- **Static File Serving**: Flask serves `dist/` files (like Docker `/app/static`)",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "UNIFIED_STARTUP_IMPLEMENTATION.md",
+      "line_number": 122,
+      "line_content": "- **Docker**: `/app/static` (copied from builder stage)",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "backend\\server.py",
+      "line_number": 46,
+      "line_content": "# In Docker: /app/static, In local development: ../dist",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "backend\\server.py",
+      "line_number": 49,
+      "line_content": "if os.path.exists('/app/static'):",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "backend\\server.py",
+      "line_number": 51,
+      "line_content": "static_folder_path = '/app/static'",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "tools\\helios_path_analyzer.py",
+      "line_number": 68,
+      "line_content": "'regex': re.compile(r'[\"\\']?/app/[^\"\\']*[\"\\']?'),",
+      "match_type": "docker_references",
+      "severity": "INFO",
+      "suggested_fix": "Ensure Docker paths align with local development"
+    },
+    {
+      "file_path": "tools\\helios_path_analyzer.py",
+      "line_number": 306,
+      "line_content": "parser.add_argument('--root', default=r\"C:\\Users\\RobMo\\OneDrive\\Documents\\helios\",",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "tools\\verify-dependencies-fixed.ps1",
+      "line_number": 5,
+      "line_content": "$ProjectDir = \"C:\\Users\\RobMo\\OneDrive\\Documents\\helios\"",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    },
+    {
+      "file_path": "tools\\verify-dependencies.ps1",
+      "line_number": 5,
+      "line_content": "$ProjectDir = \"C:\\Users\\RobMo\\OneDrive\\Documents\\helios\"",
+      "match_type": "hardcoded_paths",
+      "severity": "WARNING",
+      "suggested_fix": "Use relative paths or environment variables"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "created_at": "2025-08-16T21:55:03.675139",
+  "version": "1.0.0",
+  "architecture": "PowerballNet",
+  "sequence_length": 50,
+  "device": "cpu",
+  "training_completed": true,
+  "total_epochs": 50,
+  "best_loss": 22.57137107849121,
+  "final_loss": 22.57137107849121
+}

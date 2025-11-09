@@ -1,1 +1,0 @@
-2025-08-23 00:33:43.719706 - Early stopping triggered at epoch 8, best val loss: 7.5257

@@ -1,8 +1,0 @@
-{
-    "modelName": "helios_real_powerball_2025",
-    "epochs": 30,
-    "learningRate": 0.001,
-    "batchSize": 16,
-    "sequenceLength": 50,
-    "dataSource": "c:/Users/RobMo/OneDrive/Documents/helios/helios_compatible_powerball.csv"
-}

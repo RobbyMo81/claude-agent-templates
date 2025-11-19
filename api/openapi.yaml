@@ -1,0 +1,506 @@
+openapi: 3.1.0
+info:
+  title: Agent Army API
+  version: 2.0.0
+  description: |
+    Structured agentic workflow system for AL/Business Central development.
+
+    ## Authentication
+    All endpoints require Bearer token authentication (OAuth2/JWT).
+
+    ## Rate Limiting
+    - 100 requests/minute per user
+    - 1000 requests/minute per organization
+
+  contact:
+    name: Agent Army Team
+    url: https://github.com/RobbyMo81/claude-agent-templates
+  license:
+    name: Mozilla Public License 2.0
+    url: https://www.mozilla.org/en-US/MPL/2.0/
+
+servers:
+  - url: https://api.agent-army.dev
+    description: Development
+  - url: https://api.agent-army.staging
+    description: Staging
+  - url: https://api.agent-army.com
+    description: Production
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: missions
+    description: Mission management
+  - name: users
+    description: User management
+  - name: health
+    description: Health and status checks
+
+paths:
+  /health:
+    get:
+      tags: [health]
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, degraded, unhealthy]
+                  version:
+                    type: string
+                  dependencies:
+                    type: object
+                    properties:
+                      database:
+                        type: string
+                        enum: [up, down]
+                      redis:
+                        type: string
+                        enum: [up, down]
+                      temporal:
+                        type: string
+                        enum: [up, down]
+                      llm_provider:
+                        type: string
+                        enum: [up, down]
+
+  /api/v1/missions:
+    get:
+      tags: [missions]
+      summary: List missions
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, running, completed, failed]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of missions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Mission'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags: [missions]
+      summary: Create mission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MissionRequest'
+      responses:
+        '201':
+          description: Mission created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '402':
+          description: Budget exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+  /api/v1/missions/{mission_id}:
+    get:
+      tags: [missions]
+      summary: Get mission details
+      parameters:
+        - name: mission_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Mission details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [missions]
+      summary: Cancel mission
+      parameters:
+        - name: mission_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Mission cancelled
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/missions/{mission_id}/approve:
+    post:
+      tags: [missions]
+      summary: Approve production deployment
+      description: Required for missions deploying to production environment
+      parameters:
+        - name: mission_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Mission approved and continuing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+        '403':
+          description: User not authorized to approve
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/users/me:
+    get:
+      tags: [users]
+      summary: Get current user profile
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /api/v1/users/me/budget:
+    get:
+      tags: [users]
+      summary: Get budget status
+      responses:
+        '200':
+          description: Budget information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  monthly_budget_usd:
+                    type: number
+                  spent_this_month_usd:
+                    type: number
+                  remaining_usd:
+                    type: number
+                  period_start:
+                    type: string
+                    format: date-time
+                  period_end:
+                    type: string
+                    format: date-time
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Mission:
+      type: object
+      required: [id, user_id, specification, status, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        specification:
+          $ref: '#/components/schemas/MissionSpecification'
+        status:
+          type: string
+          enum: [pending, running, completed, failed, cancelled]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Completion percentage (0.0 to 1.0)
+        current_step:
+          type: string
+          description: Human-readable current step (e.g., "Generating code")
+        result:
+          $ref: '#/components/schemas/MissionResult'
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        estimated_cost_usd:
+          type: number
+        actual_cost_usd:
+          type: number
+          nullable: true
+
+    MissionRequest:
+      type: object
+      required: [specification]
+      properties:
+        specification:
+          $ref: '#/components/schemas/MissionSpecification'
+        environment:
+          type: string
+          enum: [dev, staging, production]
+          default: dev
+          description: Target Business Central environment
+
+    MissionSpecification:
+      type: object
+      required: [action, target]
+      properties:
+        action:
+          type: string
+          enum: [generate_table, generate_page, generate_codeunit, refactor, optimize]
+        target:
+          type: object
+          description: Action-specific configuration
+          additionalProperties: true
+        options:
+          type: object
+          properties:
+            skip_tests:
+              type: boolean
+              default: false
+            auto_deploy:
+              type: boolean
+              default: false
+              description: Auto-deploy to target environment (requires approval for production)
+            coverage_target:
+              type: number
+              minimum: 0
+              maximum: 1
+              default: 0.85
+      example:
+        action: generate_table
+        target:
+          name: Customer
+          fields:
+            - name: No.
+              type: Code[20]
+              primary_key: true
+            - name: Name
+              type: Text[100]
+            - name: CreditLimit
+              type: Decimal
+        options:
+          skip_tests: false
+          auto_deploy: false
+
+    MissionResult:
+      type: object
+      nullable: true
+      properties:
+        generated_files:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              content:
+                type: string
+              language:
+                type: string
+        validation_results:
+          type: object
+          properties:
+            security:
+              $ref: '#/components/schemas/ValidationResult'
+            compliance:
+              $ref: '#/components/schemas/ValidationResult'
+            performance:
+              $ref: '#/components/schemas/ValidationResult'
+        test_results:
+          type: object
+          properties:
+            total:
+              type: integer
+            passed:
+              type: integer
+            failed:
+              type: integer
+            coverage:
+              type: number
+        deployment:
+          type: object
+          nullable: true
+          properties:
+            environment:
+              type: string
+            app_id:
+              type: string
+              format: uuid
+            version:
+              type: string
+            published_at:
+              type: string
+              format: date-time
+
+    ValidationResult:
+      type: object
+      properties:
+        passed:
+          type: boolean
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                type: string
+                enum: [critical, high, medium, low, info]
+              message:
+                type: string
+              location:
+                type: object
+                properties:
+                  file:
+                    type: string
+                  line:
+                    type: integer
+                  column:
+                    type: integer
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [developer, approver, admin]
+        created_at:
+          type: string
+          format: date-time
+        monthly_budget_usd:
+          type: number
+          default: 100
+
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        has_more:
+          type: boolean
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: INVALID_REQUEST
+              message: Specification must be valid YAML
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: NOT_FOUND
+              message: Mission not found
+
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: RATE_LIMIT_EXCEEDED
+              message: Maximum 100 requests per minute exceeded
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+            description: Unix timestamp when rate limit resets

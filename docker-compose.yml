@@ -1,0 +1,244 @@
+version: '3.8'
+
+# Agent Army Local Development Environment
+# Usage: docker-compose up
+# Access: http://localhost:8000
+# API Docs: http://localhost:8000/docs
+
+services:
+  # ============================================================================
+  # Application Service
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-army-app
+    ports:
+      - "8000:8000"
+    environment:
+      # Application
+      APP_ENV: development
+      DEBUG: "true"
+      LOG_LEVEL: INFO
+
+      # Database
+      DATABASE_URL: postgresql://agent_army:agent_army_dev@db:5432/agent_army
+      DATABASE_POOL_SIZE: 10
+      DATABASE_MAX_OVERFLOW: 20
+
+      # Redis
+      REDIS_URL: redis://redis:6379/0
+
+      # Temporal
+      TEMPORAL_HOST: temporal:7233
+      TEMPORAL_NAMESPACE: default
+
+      # LLM Provider (mock for local dev - no API costs)
+      LLM_PROVIDER: mock
+      # For real testing, uncomment and add your API key:
+      # LLM_PROVIDER: claude
+      # ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+
+      # Authentication (disabled in local dev)
+      AUTH_ENABLED: "false"
+      # For real auth testing:
+      # AUTH_ENABLED: true
+      # AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+      # AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+
+      # Security
+      SECRET_KEY: dev-secret-key-change-in-production
+      ALLOWED_ORIGINS: http://localhost:3000,http://localhost:8000
+
+      # Business Central (mock in local dev)
+      BC_MOCK: "true"
+      # BC_ADMIN_API_URL: ${BC_ADMIN_API_URL}
+      # BC_TENANT_ID: ${BC_TENANT_ID}
+
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src:ro
+      - ./api:/app/api:ro
+      # Mount test data
+      - ./tests/fixtures:/app/fixtures:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      temporal:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agent-army
+
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+  db:
+    image: postgres:15-alpine
+    container_name: agent-army-db
+    environment:
+      POSTGRES_USER: agent_army
+      POSTGRES_PASSWORD: agent_army_dev
+      POSTGRES_DB: agent_army
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      # Persist data
+      - postgres_data:/var/lib/postgresql/data
+      # Initialize schema
+      - ./infrastructure/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      # Seed data for development
+      - ./infrastructure/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent_army"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agent-army
+
+  # ============================================================================
+  # Redis Cache
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: agent-army-redis
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - agent-army
+
+  # ============================================================================
+  # Temporal Workflow Engine
+  # ============================================================================
+  temporal:
+    image: temporalio/auto-setup:latest
+    container_name: agent-army-temporal
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=agent_army
+      - POSTGRES_PWD=agent_army_dev
+      - POSTGRES_SEEDS=db
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml
+    ports:
+      - "7233:7233"  # gRPC
+      - "8233:8233"  # UI
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./infrastructure/temporal/config:/etc/temporal/config/dynamicconfig:ro
+    networks:
+      - agent-army
+
+  # ============================================================================
+  # Temporal UI (Web Interface)
+  # ============================================================================
+  temporal-ui:
+    image: temporalio/ui:latest
+    container_name: agent-army-temporal-ui
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000,http://localhost:8000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - temporal
+    networks:
+      - agent-army
+
+  # ============================================================================
+  # Adminer (Database Management UI)
+  # ============================================================================
+  adminer:
+    image: adminer:latest
+    container_name: agent-army-adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DESIGN: dracula
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    networks:
+      - agent-army
+
+  # ============================================================================
+  # Redis Commander (Redis Management UI)
+  # ============================================================================
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: agent-army-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8082:8081"
+    depends_on:
+      - redis
+    networks:
+      - agent-army
+
+networks:
+  agent-army:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# ============================================================================
+# Development Helper Commands
+# ============================================================================
+
+# Start all services:
+#   docker-compose up
+#
+# Start in background:
+#   docker-compose up -d
+#
+# View logs:
+#   docker-compose logs -f app
+#
+# Access services:
+#   - App: http://localhost:8000
+#   - API Docs: http://localhost:8000/docs
+#   - Temporal UI: http://localhost:8080
+#   - Database UI: http://localhost:8081 (server: db, user: agent_army, password: agent_army_dev)
+#   - Redis UI: http://localhost:8082
+#
+# Run tests:
+#   docker-compose exec app pytest
+#
+# Access database:
+#   docker-compose exec db psql -U agent_army
+#
+# Access Redis CLI:
+#   docker-compose exec redis redis-cli
+#
+# Rebuild after code changes:
+#   docker-compose up --build
+#
+# Stop all services:
+#   docker-compose down
+#
+# Stop and remove volumes (fresh start):
+#   docker-compose down -v

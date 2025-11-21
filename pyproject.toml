@@ -9,6 +9,9 @@ dependencies = [
     "pytest-timeout>=2.1.0",
     "pydantic>=2.0.0",
     "asyncio",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "requests>=2.31.0",
 ]
 
 [project.optional-dependencies]
@@ -18,10 +21,23 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.5.0",
 ]
+viz = [
+    "matplotlib>=3.7.0",
+]
+all = [
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "matplotlib>=3.7.0",
+]
 
 [build-system]
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["agents*", "cftc_analytics*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -35,6 +51,7 @@ markers = [
     "integration: Integration tests for agent coordination",
     "workflow: End-to-end workflow tests",
     "concurrent: Tests for simultaneous agent operations",
+    "cftc: Tests for CFTC analytics tool",
 ]
 
 [tool.black]

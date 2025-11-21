@@ -2,7 +2,7 @@
 Documentation Agent - Generates documentation for AL/Business Central projects.
 """
 
-from typing import Any
+from typing import Any, Dict
 from agents.base.agent import Agent, AgentCapability, Task
 
 

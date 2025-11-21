@@ -15,19 +15,39 @@ claude-agent-templates/
 │   │   ├── agent.py         # Base agent class with self-organization
 │   │   ├── coordinator.py   # Workflow coordination and orchestration
 │   │   └── workflow.py      # Workflow definitions and management
-│   └── specialized/          # AL/Business Central specialized agents
+│   └── specialized/          # Specialized agents
 │       ├── code_agent.py    # AL code generation and analysis
 │       ├── test_agent.py    # Test generation and execution
 │       ├── schema_agent.py  # Database schema management
 │       ├── api_agent.py     # API integration
 │       ├── deployment_agent.py  # App deployment and compilation
-│       └── documentation_agent.py  # Documentation generation
+│       ├── documentation_agent.py  # Documentation generation
+│       └── cftc_agent.py    # CFTC COT data analysis
+├── cftc_analytics/           # CFTC Analytics Tool
+│   ├── data/                # Data fetching and models
+│   │   ├── client.py        # CFTC API client
+│   │   └── models.py        # Data models and enums
+│   ├── analytics/           # Analytics engine
+│   │   ├── engine.py        # Main analytics engine
+│   │   └── indicators.py    # Technical indicators
+│   ├── visualization/       # Charting and visualization
+│   │   └── charts.py        # Chart generation
+│   └── README.md            # CFTC tool documentation
+├── examples/                 # Usage examples
+│   └── cftc/                # CFTC analytics examples
+│       ├── basic_usage.py   # Basic usage example
+│       ├── visualization_example.py  # Charting examples
+│       └── agent_usage.py   # Agent integration example
 ├── tests/                    # Comprehensive test suite
 │   ├── conftest.py          # Test fixtures and configuration
 │   ├── test_agents.py       # Unit tests for individual agents
 │   ├── test_coordination.py # Agent coordination and self-organization tests
 │   ├── test_workflows.py    # Workflow execution tests
-│   └── test_concurrent_workflows.py  # Concurrent workflow tests
+│   ├── test_concurrent_workflows.py  # Concurrent workflow tests
+│   └── cftc/                # CFTC analytics tests
+│       ├── test_client.py   # Client tests
+│       ├── test_analytics.py # Analytics engine tests
+│       └── test_cftc_agent.py # CFTC agent tests
 ├── pyproject.toml           # Python project configuration
 └── CLAUDE.md                # This file
 ```
@@ -53,6 +73,7 @@ Each agent has specific capabilities:
 - **APIAgent**: `API_INTEGRATION`, `CODE_GENERATION`, `CODE_ANALYSIS`
 - **DeploymentAgent**: `DEPLOYMENT`
 - **DocumentationAgent**: `DOCUMENTATION`
+- **CFTCAgent**: `DATA_ANALYSIS`, `REPORTING`
 
 ### Workflows
 
@@ -78,6 +99,9 @@ Pre-defined workflows for common AL/Business Central development tasks:
 # Install dependencies
 pip install -e .
 
+# Install with visualization support (for CFTC charts)
+pip install -e ".[viz]"
+
 # Run all tests
 pytest
 
@@ -86,12 +110,14 @@ pytest -m unit              # Unit tests only
 pytest -m integration       # Integration tests only
 pytest -m workflow          # Workflow tests only
 pytest -m concurrent        # Concurrent workflow tests only
+pytest -m cftc              # CFTC analytics tests only
 
 # Run with coverage
-pytest --cov=agents --cov-report=html
+pytest --cov=agents --cov=cftc_analytics --cov-report=html
 
 # Run specific test file
 pytest tests/test_concurrent_workflows.py
+pytest tests/cftc/test_client.py
 
 # Run with verbose output
 pytest -v
@@ -104,16 +130,16 @@ pytest --durations=10
 
 ```bash
 # Format code
-black agents/ tests/
+black agents/ cftc_analytics/ tests/ examples/
 
 # Lint code
-ruff check agents/ tests/
+ruff check agents/ cftc_analytics/ tests/ examples/
 
 # Type checking
-mypy agents/
+mypy agents/ cftc_analytics/
 
 # Run all quality checks
-black agents/ tests/ && ruff check agents/ tests/ && mypy agents/
+black agents/ cftc_analytics/ tests/ examples/ && ruff check agents/ cftc_analytics/ tests/ examples/ && mypy agents/ cftc_analytics/
 ```
 
 ### Using the Agent System
@@ -191,6 +217,66 @@ While this is a Python-based orchestration system, it's designed for AL developm
 - `rad.json` - RAD configuration
 - `*.g.xlf` - Translation files
 - `*.flf` - License files
+
+## CFTC Analytics Tool
+
+The repository includes a comprehensive data analytics tool for CFTC Commitments of Traders (COT) reports.
+
+### Features
+
+- **Data Fetching**: Fetch COT data from CFTC's Socrata API
+- **Analytics Engine**: Calculate net positions, sentiment indexes, detect extremes
+- **Visualization**: Generate charts and comprehensive dashboards
+- **Agent Integration**: CFTCAgent for use in multi-agent workflows
+
+### Quick Start
+
+```python
+from cftc_analytics import CFTCClient, CFTCAnalytics, ReportType
+
+# Initialize
+client = CFTCClient()
+analytics = CFTCAnalytics(client=client)
+
+# Analyze commodity
+analysis = analytics.analyze_commodity(
+    commodity="GOLD",
+    report_type=ReportType.DISAGGREGATED_FUTURES,
+    weeks=52
+)
+
+# Generate report
+report = analytics.generate_report(
+    commodity="GOLD",
+    report_type=ReportType.DISAGGREGATED_FUTURES,
+    weeks=52
+)
+print(report)
+```
+
+### Examples
+
+See `examples/cftc/` for complete usage examples:
+- `basic_usage.py` - Data fetching and analysis
+- `visualization_example.py` - Chart generation
+- `agent_usage.py` - Multi-agent integration
+
+### Documentation
+
+Complete documentation available in `cftc_analytics/README.md`
+
+### Testing CFTC Tool
+
+```bash
+# Run CFTC tests
+pytest tests/cftc/ -v
+
+# Run with coverage
+pytest tests/cftc/ --cov=cftc_analytics --cov-report=html
+
+# Run integration tests (requires network)
+pytest tests/cftc/ -m integration
+```
 
 ## Git Workflow
 

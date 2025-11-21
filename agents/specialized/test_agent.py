@@ -2,7 +2,7 @@
 Test Agent - Generates and runs tests for AL/Business Central.
 """
 
-from typing import Any
+from typing import Any, Dict
 from agents.base.agent import Agent, AgentCapability, Task
 
 

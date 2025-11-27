@@ -347,18 +347,37 @@ SELECT cron.schedule(
 
 -- Monthly: Archive old audit logs (export to Cloud Storage before delete)
 -- Note: Audit logs have 7-year retention, this is just for very old logs
-SELECT cron.schedule(
-    'archive-audit-logs',
-    '0 1 1 * *',  -- 1 AM on 1st of month
-    $$
+
+-- Create a procedure to archive and delete old audit logs
+CREATE OR REPLACE PROCEDURE archive_audit_logs()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    archive_filename TEXT;
+    copy_command TEXT;
+BEGIN
+    -- Construct the filename with current year and month
+    archive_filename := 'gs://agent-army-archive/audit-logs-' || TO_CHAR(NOW(), 'YYYYMM') || '.csv.gz';
+    copy_command := 'gzip | gsutil cp - ' || archive_filename;
+
     -- Export logs older than 7 years to external storage
-    COPY (
-        SELECT * FROM audit_log WHERE retention_until < NOW()
-    ) TO PROGRAM 'gzip | gsutil cp - gs://agent-army-archive/audit-logs-$(date +%Y%m).csv.gz';
+    EXECUTE format(
+        $f$COPY (
+            SELECT * FROM audit_log WHERE retention_until < NOW()
+        ) TO PROGRAM %L$f$,
+        copy_command
+    );
 
     -- Then delete
     DELETE FROM audit_log WHERE retention_until < NOW();
-    $$
+END;
+$$;
+
+-- Schedule the procedure to run monthly
+SELECT cron.schedule(
+    'archive-audit-logs',
+    '0 1 1 * *',  -- 1 AM on 1st of month
+    $$CALL archive_audit_logs();$$
 );
 
 -- ============================================================================

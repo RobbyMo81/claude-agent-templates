@@ -17,7 +17,7 @@ info:
     url: https://github.com/RobbyMo81/claude-agent-templates
   license:
     name: Mozilla Public License 2.0
-    url: https://www.mozilla.org/en-US/MPL/2.0/
+    url: https://github.com/RobbyMo81/claude-agent-templates/blob/main/LICENSE
 
 servers:
   - url: https://api.agent-army.dev

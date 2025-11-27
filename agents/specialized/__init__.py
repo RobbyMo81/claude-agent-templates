@@ -6,6 +6,7 @@ from agents.specialized.schema_agent import SchemaAgent
 from agents.specialized.api_agent import APIAgent
 from agents.specialized.deployment_agent import DeploymentAgent
 from agents.specialized.documentation_agent import DocumentationAgent
+from agents.specialized.team_assistant_agent import TeamAssistantAgent
 
 __all__ = [
     "CodeAgent",
@@ -14,4 +15,5 @@ __all__ = [
     "APIAgent",
     "DeploymentAgent",
     "DocumentationAgent",
+    "TeamAssistantAgent",
 ]

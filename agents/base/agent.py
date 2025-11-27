@@ -22,6 +22,13 @@ class AgentCapability(Enum):
     DOCUMENTATION = "documentation"
     COORDINATION = "coordination"
 
+    # Hybrid mode capabilities
+    VISION_FACILITATION = "vision_facilitation"
+    REQUIREMENTS_ANALYSIS = "requirements_analysis"
+    ARCHITECTURE_DESIGN = "architecture_design"
+    DECISION_SUPPORT = "decision_support"
+    HUMAN_COLLABORATION = "human_collaboration"
+
 
 class AgentStatus(Enum):
     """Current status of an agent."""
@@ -45,6 +52,10 @@ class Task:
     result: Optional[Any] = None
     error: Optional[str] = None
     completed: bool = False
+
+    # Vision context for hybrid mode (optional)
+    vision_context: Optional[Dict[str, Any]] = None
+    phase: Optional[str] = None  # Lifecycle phase this task belongs to
 
 
 @dataclass

@@ -147,7 +147,7 @@ CREATE INDEX idx_audit_log_timestamp ON audit_log(timestamp DESC);
 CREATE INDEX idx_audit_log_retention ON audit_log(retention_until) WHERE retention_until < NOW();
 
 COMMENT ON TABLE audit_log IS 'Immutable audit trail for SOC2/GDPR compliance (7-year retention)';
-COMMENT ON CONSTRAINT audit_log_immutable ON audit_log IS 'Prevents updates/deletes to ensure immutability';
+COMMENT ON CONSTRAINT audit_log_immutable ON audit_log IS 'Ensures id is positive; immutability is enforced by rules below';
 
 -- Prevent updates and deletes on audit_log
 CREATE RULE audit_log_no_update AS ON UPDATE TO audit_log DO INSTEAD NOTHING;

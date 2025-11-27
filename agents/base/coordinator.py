@@ -82,18 +82,23 @@ class Coordinator:
                     result.errors.append(f"Failed to assign tasks in group {group_idx}")
                     break
 
+                # Build task lookup
+                task_map = {task.id: task for task in task_group}
+
                 # Execute tasks in parallel
                 task_results = await asyncio.gather(
                     *[
-                        self._execute_assigned_task(task, agent_id)
-                        for task, agent_id in assignments.items()
+                        self._execute_assigned_task(task_map[task_id], agent_id)
+                        for task_id, agent_id in assignments.items()
                     ],
                     return_exceptions=True,
                 )
 
                 # Process results
                 for i, task_result in enumerate(task_results):
-                    task = task_group[i]
+                    # Get the task ID from assignments
+                    task_id = list(assignments.keys())[i]
+                    task = task_map[task_id]
 
                     if isinstance(task_result, Exception):
                         task.error = str(task_result)
@@ -132,13 +137,13 @@ class Coordinator:
 
     async def _self_organize_task_group(
         self, task_group: List[Task]
-    ) -> Dict[Task, str]:
+    ) -> Dict[str, str]:
         """
         Let agents self-organize to handle a group of tasks.
 
-        Returns a mapping of tasks to agent IDs.
+        Returns a mapping of task IDs to agent IDs.
         """
-        assignments: Dict[Task, str] = {}
+        assignments: Dict[str, str] = {}
 
         # Broadcast tasks and collect offers
         offers: Dict[str, List[tuple[str, float]]] = {
@@ -169,7 +174,7 @@ class Coordinator:
             if available_offers:
                 available_offers.sort(key=lambda x: x[1], reverse=True)
                 best_agent_id = available_offers[0][0]
-                assignments[task] = best_agent_id
+                assignments[task.id] = best_agent_id
                 assigned_agents.add(best_agent_id)
 
         return assignments

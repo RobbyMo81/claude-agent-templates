@@ -36,7 +36,7 @@ scripts/** text eol=lf
 *.jpg  binary
 *.jpeg binary
 *.gif  binary
-*.svg  text eol=lf           # treat SVG as text for diffs
+*.svg  text eol=lf
 *.ico  binary
 *.pdf  binary
 *.zip  binary

@@ -2,7 +2,7 @@
 Schema Agent - Manages database schema for Business Central.
 """
 
-from typing import Any
+from typing import Any, Dict
 from agents.base.agent import Agent, AgentCapability, Task
 
 

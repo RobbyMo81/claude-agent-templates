@@ -85,19 +85,18 @@ class Coordinator:
                 # Build task lookup
                 task_map = {task.id: task for task in task_group}
 
-                # Execute tasks in parallel
+                # Execute tasks in parallel - store task_ids with tasks for explicit mapping
+                task_assignments = list(assignments.items())  # Preserve order explicitly
                 task_results = await asyncio.gather(
                     *[
                         self._execute_assigned_task(task_map[task_id], agent_id)
-                        for task_id, agent_id in assignments.items()
+                        for task_id, agent_id in task_assignments
                     ],
                     return_exceptions=True,
                 )
 
-                # Process results
-                for i, task_result in enumerate(task_results):
-                    # Get the task ID from assignments
-                    task_id = list(assignments.keys())[i]
+                # Process results with explicit task_id mapping (no implicit ordering)
+                for (task_id, agent_id), task_result in zip(task_assignments, task_results):
                     task = task_map[task_id]
 
                     if isinstance(task_result, Exception):
@@ -113,13 +112,14 @@ class Coordinator:
                     result.status = WorkflowStatus.PARTIALLY_COMPLETED
                     result.errors.append(f"Tasks failed in group {group_idx}")
 
-            # Determine final status
-            if not result.tasks_failed:
-                result.status = WorkflowStatus.COMPLETED
-            elif not result.tasks_completed:
-                result.status = WorkflowStatus.FAILED
-            else:
-                result.status = WorkflowStatus.PARTIALLY_COMPLETED
+            # Determine final status (only if not already set to FAILED by assignment error)
+            if result.status != WorkflowStatus.FAILED:
+                if not result.tasks_failed:
+                    result.status = WorkflowStatus.COMPLETED
+                elif not result.tasks_completed:
+                    result.status = WorkflowStatus.FAILED
+                else:
+                    result.status = WorkflowStatus.PARTIALLY_COMPLETED
 
         except asyncio.TimeoutError:
             result.status = WorkflowStatus.FAILED

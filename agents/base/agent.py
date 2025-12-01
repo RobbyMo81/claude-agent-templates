@@ -3,6 +3,7 @@ Base Agent implementation with self-organization capabilities.
 """
 
 import asyncio
+import time
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -67,7 +68,7 @@ class AgentMessage:
     recipient_id: Optional[str] = None  # None for broadcast
     message_type: str = ""  # e.g., "task_request", "task_offer", "status_update"
     payload: Dict[str, Any] = field(default_factory=dict)
-    timestamp: float = field(default_factory=lambda: asyncio.get_event_loop().time())
+    timestamp: float = field(default_factory=time.time)
 
 
 class Agent(ABC):
@@ -243,9 +244,20 @@ class Agent(ABC):
         if message.message_type == "task_request":
             task_data = message.payload.get("task")
             if task_data:
-                task = Task(**task_data)
-                if self.can_handle_task(task) and self.status == AgentStatus.IDLE:
-                    await self.offer_task_assistance(task, message.sender_id)
+                try:
+                    # Validate task_data before creating Task
+                    # Required fields check
+                    if not isinstance(task_data, dict):
+                        print(f"Agent {self.name} received invalid task_data: not a dict")
+                        return
+
+                    # Create task with validation
+                    task = Task(**task_data)
+
+                    if self.can_handle_task(task) and self.status == AgentStatus.IDLE:
+                        await self.offer_task_assistance(task, message.sender_id)
+                except (TypeError, ValueError) as e:
+                    print(f"Agent {self.name} failed to parse task_data: {e}")
 
     def stop(self) -> None:
         """Stop the agent's run loop."""

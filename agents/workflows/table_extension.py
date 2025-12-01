@@ -66,24 +66,28 @@ class TableExtensionWorkflow(HybridLifecycleWorkflow):
         """
 
         if phase == LifecyclePhase.SCOPING:
-            return await self._execute_scoping_phase(coordinator)
+            result = await self._execute_scoping_phase(coordinator)
         elif phase == LifecyclePhase.REQUIREMENTS:
-            return await self._execute_requirements_phase(coordinator)
+            result = await self._execute_requirements_phase(coordinator)
         elif phase == LifecyclePhase.ARCHITECTURE:
-            return await self._execute_architecture_phase(coordinator)
+            result = await self._execute_architecture_phase(coordinator)
         elif phase == LifecyclePhase.DESIGN:
-            return await self._execute_design_phase(coordinator)
+            result = await self._execute_design_phase(coordinator)
         elif phase == LifecyclePhase.CONSTRUCTION:
-            return await self._execute_construction_phase(coordinator)
+            result = await self._execute_construction_phase(coordinator)
         elif phase == LifecyclePhase.TESTING:
-            return await self._execute_testing_phase(coordinator)
+            result = await self._execute_testing_phase(coordinator)
         else:
-            return PhaseExecutionResult(
+            result = PhaseExecutionResult(
                 phase=phase,
                 success=False,
                 outputs={},
                 errors=[f"Phase {phase.value} not implemented"],
             )
+
+        # Track phase completion in parent's phase_results dict
+        self.phase_results[phase] = result
+        return result
 
     async def _execute_scoping_phase(
         self, coordinator: Coordinator

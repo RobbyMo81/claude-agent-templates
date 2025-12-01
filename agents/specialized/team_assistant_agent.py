@@ -317,7 +317,18 @@ class TeamAssistantAgent(Agent):
 
     async def _generate_questions(self, task: Task) -> Dict[str, Any]:
         """Generate questions for a specific context."""
-        context = task.data.get("context", "general")
+        context = task.data.get("context")
+
+        # If no explicit context, infer from creator_intent
+        if not context:
+            creator_intent = task.data.get("creator_intent", "").lower()
+            if "table" in creator_intent or "field" in creator_intent:
+                context = "table_extension"
+            elif "api" in creator_intent:
+                context = "integration"
+            else:
+                context = "general"
+
         questions = []
 
         if context in self.question_templates:
@@ -332,7 +343,7 @@ class TeamAssistantAgent(Agent):
             ]
 
         return {
-            "status": "success",
+            "status": "questions_generated",
             "questions": [q.__dict__ for q in questions],
             "count": len(questions),
         }

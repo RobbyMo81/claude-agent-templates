@@ -257,12 +257,22 @@ class LearningAnalyzer:
         task_types = set(r.context.task_type for r in self.log.records)
         for task_type in task_types:
             stats = self.log.get_task_type_stats(task_type)
-            if stats["count"] >= 10 and stats["override_rate"] == 0:
+
+            # Check RECENT performance (last 20 decisions) to identify learning
+            task_records = [r for r in self.log.records if r.context.task_type == task_type]
+            recent_records = task_records[-20:] if len(task_records) >= 20 else task_records
+            recent_overrides = sum(1 for r in recent_records if r.was_override)
+            recent_override_rate = recent_overrides / len(recent_records) if recent_records else 1.0
+
+            # Automation candidate if recent performance is excellent
+            # (>= 10 total decisions and last 20 have 0% override rate)
+            if stats["count"] >= 10 and recent_override_rate == 0 and len(recent_records) >= 10:
                 insights.append(
                     LearningInsight(
                         category="automation_candidate",
                         description=f"Task type '{task_type}' ready for full automation",
-                        evidence=f"{stats['count']} decisions, 0 overrides, "
+                        evidence=f"{stats['count']} total decisions, "
+                        f"last {len(recent_records)} with 0 overrides, "
                         f"{stats['avg_confidence']:.0%} avg confidence",
                         confidence=stats["avg_confidence"],
                         actionable=True,

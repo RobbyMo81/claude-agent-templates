@@ -1,0 +1,40 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Action Required: Feature Completion, Bug Fixes, and Workflow Automation - Phase 6
+
+**Objective:**
+This directive formally initiates the final implementation phase, **Phase 6**. The objective is to bring the application to a feature-complete state by resolving a critical UI bug, implementing the missing prediction accuracy evaluation system, and automating the final step of the AutoML workflow.
+
+**Context:**
+The successful completion of Phase 5 has made the system operationally stable and fault-tolerant. We will now address the remaining functional gaps. A critical `datetime` parsing error has been identified in the "ML Experimental" module that must be resolved first to ensure a stable foundation for the new features.
+
+**Required Tasks (in priority order):**
+
+1.  **Resolve DateTime Parsing Error (CRITICAL BUG):**
+    * **Issue:** Users are encountering a `ValueError` in the "ML Experimental" module when parsing date/time strings. The error is: `time data "2025-06-08 18:24:59.445699" doesn't match format "%Y-%m-%dT%H:%M:%S.%f%z"`.
+    * **Locations:** The error occurs on the "Feature Importance," "Prediction History," and "Prediction Management" pages within the "ML Experimental" module.
+    * **Action:** Investigate the code in these UI modules. Locate the `pd.to_datetime` or `strptime` calls that are failing. Correct the parsing logic, likely by providing a more flexible format string or using one of the error message's suggestions, to correctly handle timestamps that do not include the "T" separator or a timezone offset.
+
+2.  **Implement Prediction Accuracy Evaluation:**
+    * Build the backend functionality to compare submitted "New Draw Results" against the most recent stored predictions.
+    * This process should calculate accuracy metrics (e.g., number of white balls matched, Powerball match) and store these metrics in a new or existing database table, linked to the prediction set.
+
+3.  **Update UI for Accuracy Display:**
+    * Create or update the UI components in the "Prediction History" section to query and display these new accuracy metrics, providing users with clear feedback on model performance over time.
+
+4.  **Automate AutoML Workflow:**
+    * Implement the final step of the AutoML workflow. After a tuning job successfully identifies the `best_params`, create a mechanism that allows a user to automatically trigger a new training run in the `ModelTrainingService` using those optimal hyperparameters.
+
+**Deliverable:**
+Upon completion of all tasks, you are required to produce a final **"Feature & Workflow Completion Report"**. This report must detail the resolution of the `datetime` bug, document the new accuracy tracking system, and explain the automated AutoML training workflow, with validation for each completed task.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: Feature & Workflow Completion Report (Phase 6)
+Report Date: [Date of Completion]
+Analysis Scope: Resolution of UI bugs, implementation of prediction accuracy tracking, and automation of the AutoML workflow.
+System Status: Completed - System Feature-Complete and Stabilized.
+Analyst: [Your Name/Identifier]
+```

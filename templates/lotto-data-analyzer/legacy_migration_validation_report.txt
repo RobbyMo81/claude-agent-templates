@@ -1,0 +1,25 @@
+
+LEGACY DATA MIGRATION VALIDATION REPORT
+======================================
+Validation Date: 2025-06-14T14:44:02.615997
+
+VALIDATION SUMMARY
+------------------
+Overall Result: FAILED
+Record Count Check: FAILED
+is_active Flag Check: PASSED
+Sample Integrity Check: PASSED
+
+DETAILED RESULTS
+----------------
+Legacy Records Found: 38
+Migrated Records Found: 16
+Sample Records Verified: 4
+
+VALIDATION ERRORS (1)
+--------------------
+• Record count validation FAILED: 16 < 38
+
+VALIDATION WARNINGS (1)
+--------------------
+• Only 2/4 samples matched in database

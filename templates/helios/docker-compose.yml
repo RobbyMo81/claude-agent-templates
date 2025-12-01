@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Backend Python API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: helios-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=false
+    volumes:
+      - backend_logs:/app/logs
+    networks:
+      - helios-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Frontend React App
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: helios-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - helios-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Development services (optional)
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: helios-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_HOST=backend
+      - VITE_API_PORT=5001
+      - VITE_API_PROTOCOL=http
+    depends_on:
+      - backend
+    networks:
+      - helios-network
+    profiles:
+      - dev
+    restart: unless-stopped
+
+networks:
+  helios-network:
+    driver: bridge
+    name: helios-network
+
+volumes:
+  backend_logs:
+    name: helios-backend-logs

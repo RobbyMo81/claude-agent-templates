@@ -1,0 +1,35 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Action Required: Model Persistence and Reliability - Phase 5
+
+**Objective:**
+This directive formally initiates **Phase 5: Model Persistence and Reliability**. The primary objective is to eliminate the system's operational volatility by implementing a robust mechanism to persist trained ML models to disk and automatically load them when the application starts. This will ensure that a server restart does not erase the trained models.
+
+**Context:**
+The successful completion of Phase 4 has restored data history functionality. Now, we must address the architectural issue where trained models exist only in memory. The `OPERATIONAL_READINESS_REPORT` confirms that `joblib` is an available dependency and that system paths are managed via hard-coded conventions, which should inform your implementation.
+
+**Required Tasks:**
+
+1.  **Implement Model Persistence:**
+    * Create a new directory at the project root named `models/`.
+    * In the `ModelTrainingService`, after a model is successfully trained, use `joblib.dump` to save the final, trained pipeline object to a uniquely named file within the new `models/` directory.
+    * Modify the `prediction_sets` table in the SQLite database to include a new column, `model_artifact_path`, and store the path to the saved model file in this column for the relevant prediction set.
+
+2.  **Implement Model Loading on Startup:**
+    * Add logic to the application's main startup sequence (e.g., in `app.py` or a suitable initialization module).
+    * This startup logic must query the database to find the `model_artifact_path` for the most recent `is_current = TRUE` prediction set for each model type.
+    * It will then use `joblib.load` to load the model file from that path into the appropriate service instance, making it immediately available for predictions without requiring manual retraining.
+
+**Deliverable:**
+Upon completion of all tasks, you are required to produce a formal **"Model Persistence Implementation Report"**. This report must detail the new model saving and loading architecture, document any database schema changes, and include validation that the application successfully loads and uses persisted models after a server restart.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: Model Persistence Implementation Report (Phase 5)
+Report Date: [Date of Completion]
+Analysis Scope: Implementation of model persistence to disk and automated loading on application startup.
+System Status: Stabilized - Model volatility resolved. System is now fault-tolerant to restarts.
+Analyst: [Your Name/Identifier]
+```

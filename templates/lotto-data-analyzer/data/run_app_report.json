@@ -1,0 +1,25 @@
+{
+  "start_time": "2025-09-02T05:18:57.803179Z",
+  "host": "127.0.0.1",
+  "port": 8501,
+  "missing_files": [],
+  "missing_packages": [],
+  "gpu_info": {
+    "nvidia_smi": true,
+    "nvidia_devices": [
+      "GPU 0: NVIDIA GeForce RTX 4070 Laptop GPU (UUID: GPU-88c24e5d-85e3-00f2-1081-603c20a04c34)"
+    ],
+    "torch_cuda": false,
+    "tensorflow_gpu": false,
+    "cupy": false
+  },
+  "exit_code": 1,
+  "end_time": "2025-09-02T05:19:01.042064Z",
+  "stdout_tail": [],
+  "stderr_tail": [
+    "2025-09-01 22:19:00.445 Port 8501 is already in use"
+  ],
+  "venv_detected": true,
+  "venv_path": "C:\\Users\\RobMo\\OneDrive\\Documents\\LottoDataAnalyzer\\venv\\Scripts\\python.exe",
+  "used_python": "C:\\Users\\RobMo\\OneDrive\\Documents\\LottoDataAnalyzer\\venv\\Scripts\\python.exe"
+}

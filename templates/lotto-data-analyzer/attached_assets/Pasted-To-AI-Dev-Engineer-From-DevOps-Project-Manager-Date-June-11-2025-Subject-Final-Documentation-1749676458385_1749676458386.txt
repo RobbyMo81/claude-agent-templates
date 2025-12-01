@@ -1,0 +1,34 @@
+To: AI Dev Engineer
+From: DevOps Project Manager
+Date: June 11, 2025
+Subject: Final Documentation: As-Built Report for Unified ML System
+
+Objective:
+To formally conclude the successful three-phase system consolidation project, we require a final, comprehensive technical report. The purpose of this "as-built" document is to create a definitive, code-level technical reference for the newly unified ML architecture. This report will be the primary resource for long-term maintenance, future development, and onboarding new team members.
+
+Context:
+The team has successfully completed the stabilization, consolidation, and migration of the ML system. As a final deliverable, we need to document the system in its final, operational state. This report should be detailed and based entirely on the current production codebase, serving as the single source of truth for all technical aspects of the ML pipeline.
+
+Required Report Sections:
+Please provide a detailed report, including code snippets and explanations, covering the following areas:
+
+Prediction Storage and Retrieval Architecture:
+
+Provide a code-level breakdown of how the PersistentModelPredictionManager stores prediction sets and their associated metadata in the SQLite database.
+Detail the corresponding data retrieval methods. Explain the function calls and logic used to query the database and provide historical prediction data to the front end for display in the "Prediction History" sections of the application.
+ML Model Training Data Flow:
+
+Clarify the data source for the ModelTrainingService.train_models() method. At a code level, where does the training DataFrame originate?
+Explain the fundamental training relationship: does the system train on past actual draw numbers to generate new predictions, or does it use past predictions as a training source?
+"New Draw Results" Ingestion and Usage:
+
+Detail the end-to-end process at a code level that occurs when a user submits "New Draw Results" through the UI.
+How is this new data ingested and stored?
+How is this data used by the system to evaluate the performance or accuracy of previously generated predictions?
+AutoML and Fine-Tuning Systems:
+
+Document the data flow for the "AutoML Tuning" feature. How does it select its dataset for tuning runs?
+Explain its interaction with the ModelTrainingService and the FeatureEngineeringService.
+Historical Data Access for Analytics Modules:
+
+Describe the current, unified method that the various statistical analysis modules (e.g., Number Frequency, Combinatorial Analysis, Time Trends, and Sum Analysis) use to access the historical draw data for their calculations.

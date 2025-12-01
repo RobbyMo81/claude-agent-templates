@@ -1,0 +1,26 @@
+# ── Git LFS: Large binaries and models (backend)
+backend/**/*.zip filter=lfs diff=lfs merge=lfs -text
+backend/**/*.tar.gz filter=lfs diff=lfs merge=lfs -text
+backend/**/*.bin filter=lfs diff=lfs merge=lfs -text
+backend/**/*.h5 filter=lfs diff=lfs merge=lfs -text
+backend/**/*.ckpt filter=lfs diff=lfs merge=lfs -text
+backend/**/*.pb filter=lfs diff=lfs merge=lfs -text
+backend/**/*.pt filter=lfs diff=lfs merge=lfs -text
+backend/**/*.onnx filter=lfs diff=lfs merge=lfs -text
+# ── Optional: if storing large outputs, logs, or intermediate files
+backend/**/*.csv filter=lfs diff=lfs merge=lfs -text
+backend/**/*.log filter=lfs diff=lfs merge=lfs -text
+backend/**/*.npy filter=lfs diff=lfs merge=lfs -text
+# ── Global binary formats across repo
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.exe filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
+# ── Explicit fallback (less common, safe to ignore if not used)
+*.7z filter=lfs diff=lfs merge=lfs -text
+*.rar filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+code_quality_report.json filter=lfs diff=lfs merge=lfs -text

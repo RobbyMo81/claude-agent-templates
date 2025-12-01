@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helios: Powerball Anomaly Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.9.0",
+    "chart.js": "https://esm.sh/chart.js@^4.4.3",
+    "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.2.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-gray-900">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+    <!-- Full Stack Integration Test -->
+    <script type="module">
+        import { getApiBaseUrl, getApiEndpoint, getCurrentConfig } from './services/config.js';
+
+        // Comprehensive integration test function
+        window.testFullStack = async function() {
+            console.log('🔗 Helios Full Stack Integration Test');
+            console.log('====================================');
+
+            const config = getCurrentConfig();
+            console.log('\n📋 Configuration:');
+            console.log('   Frontend URL:', window.location.origin);
+            console.log('   Backend URL:', getApiBaseUrl());
+            console.log('   Full Config:', config);
+
+            let passedTests = 0;
+            let totalTests = 0;
+
+            // Test 1: Backend Health Check
+            console.log('\n🏥 Testing Backend Health...');
+            totalTests++;
+            try {
+                const response = await fetch(getApiEndpoint('/health'));
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('   ✅ Backend Health: PASSED');
+                    console.log('   📊 Response:', data);
+                    passedTests++;
+                } else {
+                    console.log('   ❌ Backend Health: FAILED (Status:', response.status, ')');
+                }
+            } catch (error) {
+                console.log('   ❌ Backend Health: ERROR -', error.message);
+            }
+
+            // Test 2: Models API
+            console.log('\n🤖 Testing Models API...');
+            totalTests++;
+            try {
+                const response = await fetch(getApiEndpoint('/api/models'));
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('   ✅ Models API: PASSED');
+                    console.log('   📊 Available models:', data);
+                    passedTests++;
+                } else {
+                    console.log('   ❌ Models API: FAILED (Status:', response.status, ')');
+                }
+            } catch (error) {
+                console.log('   ❌ Models API: ERROR -', error.message);
+            }
+
+            // Test 3: CORS Test
+            console.log('\n🌐 Testing CORS Configuration...');
+            totalTests++;
+            try {
+                const response = await fetch(getApiEndpoint('/health'), {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    console.log('   ✅ CORS: PASSED');
+                    passedTests++;
+                } else {
+                    console.log('   ⚠️ CORS: Possible issues');
+                }
+            } catch (error) {
+                console.log('   ❌ CORS: ERROR -', error.message);
+            }
+
+            // Results Summary
+            console.log('\n� Test Results Summary');
+            console.log('========================');
+            console.log(`Total Tests: ${totalTests}`);
+            console.log(`✅ Passed: ${passedTests}`);
+            console.log(`❌ Failed: ${totalTests - passedTests}`);
+            console.log(`Success Rate: ${Math.round((passedTests / totalTests) * 100)}%`);
+
+            if (passedTests === totalTests) {
+                console.log('\n🎉 ALL TESTS PASSED! Full stack integration is working perfectly!');
+            } else {
+                console.log('\n⚠️ Some tests failed. Possible issues:');
+                console.log('   • Backend server not running');
+                console.log('   • Port mismatch in configuration');
+                console.log('   • CORS configuration issues');
+                console.log('   • Network connectivity problems');
+            }
+
+            return passedTests === totalTests;
+        };
+
+        // Simple connectivity test
+        window.testConnection = async function() {
+            console.log('🔗 Quick Backend Connection Test...');
+            try {
+                const response = await fetch(getApiEndpoint('/health'));
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ Backend Connected!');
+                    console.log('📊 Status:', data.status);
+                    console.log('🔧 Service:', data.service);
+                    return true;
+                } else {
+                    console.log('⚠️ Backend responded but with error:', response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.log('❌ Backend not accessible:', error.message);
+                console.log('💡 Make sure Python backend is running on', getApiBaseUrl());
+                return false;
+            }
+        };
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                console.log('🚀 Helios Frontend Loaded Successfully!');
+                console.log('🔧 Backend configured for:', getApiBaseUrl());
+                console.log('');
+                console.log('💡 Available test commands:');
+                console.log('   testConnection()  - Quick backend test');
+                console.log('   testFullStack()   - Comprehensive integration test');
+                console.log('');
+
+                // Auto-run quick test
+                console.log('🔄 Running automatic connectivity test...');
+                testConnection();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

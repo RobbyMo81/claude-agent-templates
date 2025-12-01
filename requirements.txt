@@ -1,0 +1,22 @@
+# Claude Agent Templates requirements
+# Core Python (standard library) modules are not listed here
+
+# Data science and analytics
+numpy
+pandas
+matplotlib
+
+# HTTP requests
+requests
+
+# If you use pytest for testing, uncomment the next line
+# pytest
+
+# If you use aiohttp for async HTTP, uncomment the next line
+# aiohttp
+
+# If you use tqdm for progress bars, uncomment the next line
+# tqdm
+
+# If you use PyYAML for YAML parsing, uncomment the next line
+# pyyaml

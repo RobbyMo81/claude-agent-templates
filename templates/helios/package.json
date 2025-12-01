@@ -1,0 +1,50 @@
+{
+  "name": "helios-powerball-anomaly-detection",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "stress-test": "npm run stress-test:simple",
+    "stress-test:simple": "node tests/runStressTest.js",
+    "stress-test:windows": "cmd /c stress-test.bat",
+    "stress-test:powershell": "powershell -ExecutionPolicy Bypass -File stress-test.ps1",
+    "stress-test:unix": "bash stress-test.sh",
+    "fullstack:test": "echo \"Open http://localhost:5174 and run testFullStack() in browser console\"",
+    "python:test": "cmd /c \"backend\\venv\\Scripts\\activate && cd backend && pytest\"",
+    "fullstack:start": "echo \"Start backend first with 'npm run python:dev', then frontend with 'npm run dev'\"",
+    "python:setup": "cmd /c setup-venv.bat",
+    "python:setup:powershell": "powershell -ExecutionPolicy Bypass -File setup-venv.ps1",
+    "python:setup:unix": "bash setup-venv.sh",
+    "python:activate": "cmd /c activate-venv.bat",
+    "python:dev": "cmd /c \"backend\\venv\\Scripts\\activate && cd backend && python server.py\"",
+    "python:install": "cmd /c \"backend\\venv\\Scripts\\activate && pip install -r backend\\requirements.txt\"",
+    "python:start": "cmd /c \"backend\\venv\\Scripts\\activate && cd backend && python server.py\"",
+    "docker:up": "docker-compose up -d",
+    "docker:dev": "docker-compose --profile dev up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:build": "docker-compose build"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@google/genai": "^1.9.0",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
+    "chart.js": "^4.4.3",
+    "react": "^19.1.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0"
+  }
+}

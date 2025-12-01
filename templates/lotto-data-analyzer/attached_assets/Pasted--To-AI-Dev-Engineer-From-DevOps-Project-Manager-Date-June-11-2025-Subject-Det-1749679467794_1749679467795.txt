@@ -1,0 +1,42 @@
+**To:** AI Dev Engineer
+**From:** DevOps Project Manager
+**Date:** June 11, 2025
+**Subject:** Detailed Report Request: CSV Data Flow for ML Training Pipeline
+
+**Objective:**
+To supplement the high-level "As-Built" report, we now require a more granular, code-level technical report. Your objective is to document the complete, end-to-end data flow showing how the primary `.csv` data sources are loaded, processed, and utilized by the `ModelTrainingService` for model training.
+
+**Context:**
+The previous reports have provided an excellent overview of the system's architecture. For ongoing maintenance, future optimization, and debugging, we need to document the specific mechanics of the data pipeline that feeds our ML models. This report will serve as the definitive reference for the journey of data from a CSV file on disk to a trained model in memory.
+
+**Required Report Sections:**
+Please provide a detailed report, including code snippets and explanations, covering the following areas:
+
+1.  **CSV Data Loading and Management:**
+    * Provide a code-level breakdown of the `get_store().latest()` function.
+    * Explain how this storage manager identifies and loads the primary CSV file (e.g., `powerball_complete_dataset.csv`).
+    * Describe its data caching strategy, if any, and how it ensures all parts of the application receive the most current data.
+
+2.  **Data Preprocessing and Cleaning:**
+    * Detail all preprocessing steps that are applied to the DataFrame immediately after it is loaded from the CSV file, but *before* it is passed to the `FeatureEngineeringService`.
+    * Include code examples for date-type conversion, missing value handling, and any data-quality validations.
+
+3.  **Feature and Target Variable Separation:**
+    * Provide the specific code from the `ModelTrainingService` that separates the prepared DataFrame into the feature matrix (`X`) and the target variables (`y_white` and `y_powerball`).
+
+4.  **Time Series Cross-Validation Split:**
+    * Show, with code, how the `TimeSeriesSplit` is initialized and applied to the feature matrix and target variables to create the different training and validation folds.
+    * Explain how this implementation ensures the chronological order of the CSV data is respected during cross-validation.
+
+**Deliverable:**
+Upon completion of your analysis, you are required to produce a formal **"ML Training Data Pipeline Report"**.
+
+**The first page of your report must be formatted exactly as follows:**
+
+```
+Title: ML Training Data Pipeline Report: CSV to Model
+Report Date: [Date of Completion]
+Analysis Scope: Code-level analysis of the data flow from CSV file loading through to model training and cross-validation.
+System Status: Documented - Data pipeline mechanics verified.
+Analyst: [Your Name/Identifier]
+```

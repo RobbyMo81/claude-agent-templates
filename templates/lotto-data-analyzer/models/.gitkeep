@@ -1,0 +1,2 @@
+# Models Directory
+This directory stores persisted ML model artifacts using joblib serialization.

@@ -1,0 +1,7 @@
+2025-08-22 23:27:31,069 - INFO - Epoch 0: Train Loss = 7.5425, Val Loss = 7.5314
+2025-08-22 23:27:36,827 - INFO - Epoch 1: Train Loss = 7.5182, Val Loss = 7.5231
+2025-08-22 23:27:42,086 - INFO - Epoch 2: Train Loss = 7.4985, Val Loss = 7.5316
+2025-08-22 23:27:47,444 - INFO - Epoch 3: Train Loss = 7.4812, Val Loss = 7.5152
+2025-08-22 23:27:52,933 - INFO - Epoch 4: Train Loss = 7.4667, Val Loss = 7.5974
+2025-08-22 23:27:59,756 - INFO - Epoch 5: Train Loss = 7.4319, Val Loss = 7.6594
+2025-08-22 23:28:05,527 - INFO - Epoch 6: Train Loss = 7.4068, Val Loss = 7.7257

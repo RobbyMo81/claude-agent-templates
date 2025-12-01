@@ -4,283 +4,339 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Python-based multi-agent system for AL (Application Language) development with Microsoft Dynamics 365 Business Central. The system implements self-organizing agents that coordinate to execute complex workflows simultaneously.
+This is a **hybrid multi-agent system** for AL/Business Central development that combines **autonomous agent coordination** with **human-in-the-loop oversight**. The system is designed to graduate from supervised execution (Phase 1) to full autonomy (Phase 4) through decision learning.
 
-## Project Structure
+**Current Status**: Phase 1 (Hybrid Mode) - 67/71 tests passing (94%)
+
+## Architecture: Vision-Centric Development
+
+The core innovation is that **every agent operates from a single source of truth** (`ProjectVision` in `agents/base/vision.py`) that evolves through the development lifecycle:
 
 ```
-claude-agent-templates/
-├── agents/                    # Multi-agent system implementation
-│   ├── base/                 # Core agent framework
-│   │   ├── agent.py         # Base agent class with self-organization
-│   │   ├── coordinator.py   # Workflow coordination and orchestration
-│   │   └── workflow.py      # Workflow definitions and management
-│   └── specialized/          # Specialized agents
-│       ├── code_agent.py    # AL code generation and analysis
-│       ├── test_agent.py    # Test generation and execution
-│       ├── schema_agent.py  # Database schema management
-│       ├── api_agent.py     # API integration
-│       ├── deployment_agent.py  # App deployment and compilation
-│       ├── documentation_agent.py  # Documentation generation
-│       └── cftc_agent.py    # CFTC COT data analysis
-├── cftc_analytics/           # CFTC Analytics Tool
-│   ├── data/                # Data fetching and models
-│   │   ├── client.py        # CFTC API client
-│   │   └── models.py        # Data models and enums
-│   ├── analytics/           # Analytics engine
-│   │   ├── engine.py        # Main analytics engine
-│   │   └── indicators.py    # Technical indicators
-│   ├── visualization/       # Charting and visualization
-│   │   └── charts.py        # Chart generation
-│   └── README.md            # CFTC tool documentation
-├── examples/                 # Usage examples
-│   └── cftc/                # CFTC analytics examples
-│       ├── basic_usage.py   # Basic usage example
-│       ├── visualization_example.py  # Charting examples
-│       └── agent_usage.py   # Agent integration example
-├── tests/                    # Comprehensive test suite
-│   ├── conftest.py          # Test fixtures and configuration
-│   ├── test_agents.py       # Unit tests for individual agents
-│   ├── test_coordination.py # Agent coordination and self-organization tests
-│   ├── test_workflows.py    # Workflow execution tests
-│   ├── test_concurrent_workflows.py  # Concurrent workflow tests
-│   └── cftc/                # CFTC analytics tests
-│       ├── test_client.py   # Client tests
-│       ├── test_analytics.py # Analytics engine tests
-│       └── test_cftc_agent.py # CFTC agent tests
-├── pyproject.toml           # Python project configuration
-└── CLAUDE.md                # This file
+USER INTENT → SCOPING → REQUIREMENTS → ARCHITECTURE → DESIGN → CONSTRUCTION → TESTING → DEPLOYMENT
+                ↓           ↓              ↓             ↓            ↓            ↓
+           [HUMAN GATE] [HUMAN GATE]  [HUMAN GATE]  [HUMAN GATE] [HUMAN GATE] [HUMAN GATE]
 ```
 
-## Architecture
+### Key Components
 
-### Multi-Agent System
+**Vision System** (`agents/base/vision.py`):
+- `ProjectVision`: Single source of truth containing creator intent, refined vision, requirements, architecture, design, and all decisions
+- `LifecyclePhase`: Enum defining phases (SCOPING → REQUIREMENTS → ARCHITECTURE → DESIGN → CONSTRUCTION → TESTING → DEPLOYMENT)
+- `ClarifyingQuestion`: Questions asked by agents to refine the vision
 
-The system implements a **self-organizing multi-agent architecture** where:
+**Decision System** (`agents/base/decision.py`):
+- `DecisionMode`: AUTO_EXECUTE (≥90% confidence), PROPOSE_APPROVE (≥70%), HUMAN_DECIDE (<70%)
+- `ConfidenceScore`: Agent self-assessment that determines decision routing
+- `DecisionLog`: Tracks all decisions for learning patterns
+- `HumanInterface`: Abstract interface with `CLIHumanInterface` implementation
 
-1. **Agents** are autonomous entities with specific capabilities
-2. **Workflows** define tasks that need to be completed
-3. **Coordinator** facilitates agent discovery and workflow execution
-4. **Self-Organization** allows agents to coordinate without central control
+**Lifecycle Management** (`agents/base/lifecycle.py`):
+- `PhaseGate`: Human approval checkpoint between phases
+- `GateStatus`: APPROVED, REWORK_NEEDED, REJECTED, INCOMPLETE
+- `HybridLifecycleWorkflow`: Base class for workflows with gate integration
 
-### Agent Capabilities
+**Agent Coordination** (`agents/base/agent.py`, `agents/base/coordinator.py`):
+- Peer-to-peer messaging without central control
+- Capability-based task selection
+- Self-organization around shared vision
 
-Each agent has specific capabilities:
+## Specialized Agents
 
-- **CodeAgent**: `CODE_GENERATION`, `CODE_ANALYSIS`
-- **TestAgent**: `TESTING`
-- **SchemaAgent**: `SCHEMA_MANAGEMENT`, `CODE_GENERATION`, `CODE_ANALYSIS`
-- **APIAgent**: `API_INTEGRATION`, `CODE_GENERATION`, `CODE_ANALYSIS`
-- **DeploymentAgent**: `DEPLOYMENT`
-- **DocumentationAgent**: `DOCUMENTATION`
-- **CFTCAgent**: `DATA_ANALYSIS`, `REPORTING`
+Located in `agents/specialized/`:
 
-### Workflows
+- **TeamAssistantAgent**: Asks clarifying questions, refines vision (VISION_FACILITATION, REQUIREMENTS_ANALYSIS)
+- **SchemaAgent**: Designs table extensions (SCHEMA_MANAGEMENT, CODE_GENERATION, CODE_ANALYSIS)
+- **CodeAgent**: Generates AL code (CODE_GENERATION, CODE_ANALYSIS)
+- **TestAgent**: Creates test codeunits (TESTING)
+- **APIAgent**: Designs APIs (API_INTEGRATION, CODE_GENERATION, CODE_ANALYSIS)
+- **DeploymentAgent**: Builds and deploys .app files (DEPLOYMENT)
+- **DocumentationAgent**: Generates markdown docs (DOCUMENTATION)
+- **CFTCAgent**: CFTC data analysis (DATA_ANALYSIS, REPORTING)
 
-Pre-defined workflows for common AL/Business Central development tasks:
+## Common Commands
 
-- **FeatureWorkflow**: Code → Tests + Documentation (parallel)
-- **SchemaWorkflow**: Analyze → Generate → Test → Deploy (sequential)
-- **APIWorkflow**: Design → Code → Tests + Docs (parallel)
-- **DeploymentWorkflow**: Analyze → Test → Build → Docs + Deploy
-
-### Coordination Mechanisms
-
-- **Peer-to-peer messaging**: Agents communicate directly
-- **Capability broadcasting**: Agents announce their abilities
-- **Task offers**: Agents self-select tasks based on confidence
-- **Status notifications**: Agents notify peers of task progress
-
-## Common Development Tasks
-
-### Running Tests
+### Testing
 
 ```bash
-# Install dependencies
-pip install -e .
-
-# Install with visualization support (for CFTC charts)
-pip install -e ".[viz]"
-
 # Run all tests
 pytest
 
 # Run specific test categories
-pytest -m unit              # Unit tests only
-pytest -m integration       # Integration tests only
-pytest -m workflow          # Workflow tests only
-pytest -m concurrent        # Concurrent workflow tests only
-pytest -m cftc              # CFTC analytics tests only
-
-# Run with coverage
-pytest --cov=agents --cov=cftc_analytics --cov-report=html
+pytest -m unit              # Individual agent tests
+pytest -m integration       # Agent coordination tests
+pytest -m workflow          # Lifecycle execution tests
+pytest -m concurrent        # Multiple workflows
+pytest -m cftc              # CFTC analytics tests
 
 # Run specific test file
-pytest tests/test_concurrent_workflows.py
-pytest tests/cftc/test_client.py
+pytest tests/test_table_extension_workflow.py -v
 
-# Run with verbose output
+# With coverage
+pytest --cov=agents --cov-report=html
+
+# With verbose output
 pytest -v
 
-# Run with test duration info
+# Show test durations
 pytest --durations=10
 ```
 
-### Development Commands
+### Code Quality
 
 ```bash
 # Format code
-black agents/ cftc_analytics/ tests/ examples/
+black agents/ tests/ examples/
 
-# Lint code
-ruff check agents/ cftc_analytics/ tests/ examples/
+# Lint
+ruff check agents/ tests/ examples/
 
 # Type checking
-mypy agents/ cftc_analytics/
+mypy agents/
 
-# Run all quality checks
-black agents/ cftc_analytics/ tests/ examples/ && ruff check agents/ cftc_analytics/ tests/ examples/ && mypy agents/ cftc_analytics/
+# All quality checks
+black agents/ tests/ examples/ && ruff check agents/ tests/ examples/ && mypy agents/
 ```
 
-### Using the Agent System
+### Running Examples
+
+```bash
+# Interactive table extension demo
+python examples/table_extension_demo.py
+
+# CFTC analytics examples
+python examples/cftc/basic_usage.py
+python examples/cftc/visualization_example.py
+python examples/cftc/agent_usage.py
+```
+
+## Development Workflow
+
+### Concrete Workflow: Table Extension
+
+The `TableExtensionWorkflow` (`agents/workflows/table_extension.py`) demonstrates the complete lifecycle:
 
 ```python
 from agents.base.coordinator import Coordinator
+from agents.base.decision import CLIHumanInterface
+from agents.workflows.table_extension import TableExtensionWorkflow
 from agents.specialized import (
-    CodeAgent, TestAgent, SchemaAgent,
-    APIAgent, DeploymentAgent, DocumentationAgent
+    TeamAssistantAgent, CodeAgent,
+    SchemaAgent, TestAgent
 )
-from agents.base.workflow import FeatureWorkflow
 
-# Create coordinator
+# Setup
 coordinator = Coordinator()
-
-# Register agents
+coordinator.register_agent(TeamAssistantAgent())
 coordinator.register_agent(CodeAgent())
+coordinator.register_agent(SchemaAgent())
 coordinator.register_agent(TestAgent())
-coordinator.register_agent(DocumentationAgent())
 
-# Execute a workflow
-workflow = FeatureWorkflow("MyFeature", {
-    "name": "CustomerPortal",
-    "object_type": "table",
-    "fields": ["PortalID", "CustomerNo"]
-})
+# Create workflow
+workflow = TableExtensionWorkflow(
+    "Add Email and Phone fields to Customer table"
+)
 
-result = await coordinator.execute_workflow(workflow)
-
-# Execute multiple workflows concurrently
-workflows = [
-    FeatureWorkflow("Feature1", spec1),
-    FeatureWorkflow("Feature2", spec2),
-]
-results = await coordinator.execute_concurrent_workflows(workflows)
+# Execute with human oversight
+human = CLIHumanInterface()
+result = await workflow.execute_with_gates(
+    coordinator=coordinator,
+    human=human
+)
 ```
 
-## Testing Strategy
+**What Happens**:
+1. **Scoping Phase**: TeamAssistant asks AL-specific questions ("What BC version?", "Data classification?")
+2. **Vision Gate**: Human reviews refined vision and approves/requests rework
+3. **Requirements Phase**: Extract functional/non-functional requirements
+4. **Requirements Gate**: Human approves requirements
+5. **Architecture Phase**: SchemaAgent designs table extension structure
+6. **Architecture Gate**: Human approves design
+7. **Design Phase**: Define field IDs, types, properties
+8. **Design Gate**: Human reviews specs
+9. **Construction Phase**: CodeAgent generates AL code
+10. **Construction Gate**: Human reviews code
+11. **Testing Phase**: TestAgent creates test codeunit
+12. **Testing Gate**: Human reviews tests
 
-### Test Levels
+### Creating Custom Agents
 
-1. **Unit Tests** (`test_agents.py`): Test individual agent functionality
-2. **Coordination Tests** (`test_coordination.py`): Test agent communication and self-organization
-3. **Workflow Tests** (`test_workflows.py`): Test workflow execution and task dependencies
-4. **Concurrent Tests** (`test_concurrent_workflows.py`): Test simultaneous workflow execution
+```python
+from agents.base.agent import Agent, AgentCapability, Task
 
-### Key Test Scenarios
+class MyAgent(Agent):
+    def __init__(self):
+        super().__init__(
+            name="MyAgent",
+            capabilities={AgentCapability.CODE_GENERATION}
+        )
 
-- Agent self-organization and capability matching
-- Peer-to-peer communication
-- Task dependency resolution
-- Parallel task execution
-- Multiple concurrent workflows
-- Agent load distribution
-- Error handling and recovery
-- Real-world development scenarios
+    async def _execute_task_logic(self, task: Task):
+        # Agent-specific logic
+        return {"status": "success", "result": "..."}
+```
 
-## AL/Business Central Integration
+### Creating Custom Workflows
 
-While this is a Python-based orchestration system, it's designed for AL development:
+```python
+from agents.base.lifecycle import HybridLifecycleWorkflow
 
-- Agents generate AL code (tables, pages, codeunits, APIs)
-- Schema agents manage table extensions
-- Test agents create AL test codeunits
-- Deployment agents handle `.app` compilation and publishing
-- Documentation agents create markdown documentation
+class MyWorkflow(HybridLifecycleWorkflow):
+    def __init__(self, intent: str):
+        super().__init__("MyWorkflow", intent)
 
-### Gitignored AL Artifacts
+    async def execute_phase(self, phase, coordinator):
+        # Phase-specific logic using coordinator
+        return PhaseExecutionResult(
+            phase=phase,
+            success=True,
+            outputs={...}
+        )
+```
 
-- `.vscode/` - VS Code configuration
-- `.alcache/` - AL compiler cache
-- `.alpackages/` - Symbol packages
-- `.snapshots/` - Schema snapshots
-- `*.app` - Compiled extension files
-- `rad.json` - RAD configuration
-- `*.g.xlf` - Translation files
-- `*.flf` - License files
+## Key Architectural Patterns
+
+### 1. Vision Context Flow
+
+Agents query the vision for relevant context at each phase:
+
+```python
+context = vision.get_context_for_phase(LifecyclePhase.CONSTRUCTION)
+# Returns all requirements, architecture decisions, and design specs
+```
+
+### 2. Decision Learning
+
+Every decision becomes training data:
+
+```python
+decision_log.log(
+    agent_proposal="Use Text[80] for Email field",
+    human_decision="Use Text[100] for Email field",
+    confidence=0.85
+)
+
+# After patterns emerge:
+analyzer.suggest_autonomy_upgrade(
+    task_type="email_field_sizing",
+    mode="auto_execute"  # Ready for automation
+)
+```
+
+### 3. Confidence-Based Routing
+
+Agents self-assess and route decisions accordingly:
+
+```python
+confidence = agent.assess_confidence(task)
+
+if confidence.overall >= 0.9:
+    # Execute automatically, notify human
+    result = await agent.execute(task)
+    await human.notify(f"Executed: {task.name}")
+elif confidence.overall >= 0.7:
+    # Propose for quick approval
+    approved = await human.quick_approve(agent.proposal)
+else:
+    # Human decides, agent assists
+    decision = await human.choose(
+        prompt=f"Multiple options for {task.name}",
+        options=agent.generate_alternatives()
+    )
+```
+
+### 4. Phase Gates as Quality Checkpoints
+
+Gates ensure quality before phase transitions:
+
+```python
+gate = PhaseGate(
+    from_phase=LifecyclePhase.ARCHITECTURE,
+    to_phase=LifecyclePhase.CONSTRUCTION,
+    required_artifacts=["architecture", "data_model"],
+    approval_criteria=[
+        "Architecture supports all requirements",
+        "Performance considerations addressed"
+    ]
+)
+
+decision = await gate.review(vision, outputs, human)
+# Returns: APPROVED | REWORK_NEEDED | REJECTED
+```
+
+## Test Organization
+
+Tests are organized by concern:
+
+- `test_agents.py`: Unit tests for individual agent functionality
+- `test_coordination.py`: Peer-to-peer communication and self-organization
+- `test_workflows.py`: Workflow execution and task dependencies
+- `test_concurrent_workflows.py`: Simultaneous workflow execution
+- `test_table_extension_workflow.py`: Complete hybrid workflow lifecycle
+
+**Important**: Tests use `pytest-asyncio` with `asyncio_mode = "auto"` in `pyproject.toml`. All async tests must use `async def test_*`.
+
+## Roadmap to Autonomy
+
+The system is designed to graduate through four phases:
+
+**Phase 1: Hybrid Mode** ✅ (Current)
+- Agents propose, humans approve
+- All decisions logged
+- 67/71 tests passing
+
+**Phase 2: Selective Automation** (Next)
+- Automate high-confidence patterns
+- Target: 30% automated, 95% accuracy
+- Requires: 1000+ logged decisions
+
+**Phase 3: Expanded Autonomy**
+- Most patterns automated
+- Target: 60% automated, <10% intervention
+
+**Phase 4: Full Autonomy**
+- Complete vision-to-code pipeline
+- Target: 90% automated, human-level quality
 
 ## CFTC Analytics Tool
 
-The repository includes a comprehensive data analytics tool for CFTC Commitments of Traders (COT) reports.
+The repository includes a data analytics tool for CFTC Commitments of Traders reports (`cftc_analytics/`):
 
-### Features
+- **Data Fetching**: CFTC Socrata API client
+- **Analytics**: Net positions, sentiment indexes, extremes detection
+- **Visualization**: Charts and dashboards (requires `pip install -e ".[viz]"`)
+- **Agent Integration**: CFTCAgent for multi-agent workflows
 
-- **Data Fetching**: Fetch COT data from CFTC's Socrata API
-- **Analytics Engine**: Calculate net positions, sentiment indexes, detect extremes
-- **Visualization**: Generate charts and comprehensive dashboards
-- **Agent Integration**: CFTCAgent for use in multi-agent workflows
+See `cftc_analytics/README.md` for complete documentation.
 
-### Quick Start
+## AL/Business Central Context
 
-```python
-from cftc_analytics import CFTCClient, CFTCAnalytics, ReportType
+While this is a Python orchestration system, it generates AL code for Dynamics 365 Business Central:
 
-# Initialize
-client = CFTCClient()
-analytics = CFTCAnalytics(client=client)
+- Agents generate AL tables, pages, codeunits, APIs
+- SchemaAgent manages table extensions
+- TestAgent creates AL test codeunits
+- DeploymentAgent handles `.app` compilation
 
-# Analyze commodity
-analysis = analytics.analyze_commodity(
-    commodity="GOLD",
-    report_type=ReportType.DISAGGREGATED_FUTURES,
-    weeks=52
-)
-
-# Generate report
-report = analytics.generate_report(
-    commodity="GOLD",
-    report_type=ReportType.DISAGGREGATED_FUTURES,
-    weeks=52
-)
-print(report)
-```
-
-### Examples
-
-See `examples/cftc/` for complete usage examples:
-- `basic_usage.py` - Data fetching and analysis
-- `visualization_example.py` - Chart generation
-- `agent_usage.py` - Multi-agent integration
-
-### Documentation
-
-Complete documentation available in `cftc_analytics/README.md`
-
-### Testing CFTC Tool
+## Installation
 
 ```bash
-# Run CFTC tests
-pytest tests/cftc/ -v
+# Basic installation
+pip install -e .
 
-# Run with coverage
-pytest tests/cftc/ --cov=cftc_analytics --cov-report=html
+# With development tools
+pip install -e ".[dev]"
 
-# Run integration tests (requires network)
-pytest tests/cftc/ -m integration
+# With visualization support
+pip install -e ".[viz]"
+
+# All dependencies
+pip install -e ".[all]"
 ```
 
 ## Git Workflow
 
-- Main development branch: `claude/init-project-01A73ZUkYevJRXcgmUrzMddz`
+- Main branch: `main`
 - Feature branches: `claude/*`
-- Commit agent and test changes together
+- Commit related changes together (agent + tests)
 - Run tests before committing

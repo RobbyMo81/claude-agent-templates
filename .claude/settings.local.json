@@ -7,7 +7,11 @@
       "Bash(git reset:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(python tests/stress_test.py:*)"
+      "Bash(python tests/stress_test.py:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(dir /b)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []

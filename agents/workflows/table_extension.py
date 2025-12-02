@@ -336,7 +336,7 @@ class TableExtensionWorkflow(HybridLifecycleWorkflow):
         return PhaseExecutionResult(
             phase=LifecyclePhase.DESIGN,
             success=True,
-            outputs={"design": design, "interfaces": []},
+            outputs={"detailed_design": design, "interfaces": []},
         )
 
     async def _execute_construction_phase(

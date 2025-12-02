@@ -1,20 +1,24 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
-Table Extension Demo - End-to-end demonstration of hybrid workflow.
+Table Extension Full Demo - Complete 6-phase workflow demonstration.
 
-This script shows the complete lifecycle of creating a Business Central
-table extension using the hybrid agent architecture with human-in-the-loop
-oversight at each phase gate.
+This script runs through ALL 6 phases with human gates:
+1. Scoping → Requirements Gate
+2. Requirements → Architecture Gate
+3. Architecture → Design Gate
+4. Design → Construction Gate
+5. Construction → Testing Gate
+6. Testing → Complete
 
 Usage:
-    python examples/table_extension_demo.py
+    python examples/table_extension_full_demo.py
 """
 
 import asyncio
 from agents.base.coordinator import Coordinator
 from agents.base.decision import CLIHumanInterface
-from agents.workflows.table_extension import TableExtensionWorkflow
 from agents.base.vision import LifecyclePhase
+from agents.workflows.table_extension import TableExtensionWorkflow
 from agents.specialized.team_assistant_agent import TeamAssistantAgent
 from agents.specialized.code_agent import CodeAgent
 from agents.specialized.schema_agent import SchemaAgent
@@ -22,11 +26,12 @@ from agents.specialized.test_agent import TestAgent
 
 
 async def main():
-    """Run the table extension demo."""
+    """Run the full table extension workflow."""
 
     print("=" * 70)
-    print("  HYBRID AGENT WORKFLOW DEMONSTRATION")
+    print("  FULL HYBRID AGENT WORKFLOW DEMONSTRATION")
     print("  Table Extension for Business Central")
+    print("  (ALL 6 PHASES WITH HUMAN GATES)")
     print("=" * 70)
     print()
 
@@ -36,7 +41,7 @@ async def main():
     ).strip()
 
     if not creator_intent:
-        creator_intent = "Add Email and Phone fields to the Customer table"
+        creator_intent = "Add loyalty points tracking to Customer table with points balance, tier level, and enrollment date"
         print(f"Using demo intent: {creator_intent}")
 
     print()
@@ -72,12 +77,12 @@ async def main():
     # Step 4: Create human interface
     human = CLIHumanInterface()
 
-    # Step 5: Execute workflow with gates
+    # Step 5: Execute workflow with ALL gates
     print("=" * 70)
-    print("  STARTING WORKFLOW EXECUTION")
+    print("  STARTING FULL WORKFLOW EXECUTION")
     print("=" * 70)
     print()
-    print("The workflow will proceed through these phases:")
+    print("The workflow will proceed through ALL phases:")
     print("  1. Scoping (Vision Refinement)")
     print("  2. Requirements (Structured Requirements)")
     print("  3. Architecture (System Design)")
@@ -86,21 +91,20 @@ async def main():
     print("  6. Testing (Test Generation)")
     print()
     print("You'll be asked to approve at each phase gate.")
+    print("Type 'a' to approve, 'r' to request rework, or 'j' to reject.")
     print()
 
     input("Press Enter to begin...")
     print()
 
     try:
-        # Execute with gates
+        # Execute ALL phases from SCOPING to DEPLOYMENT
         final_vision = await workflow.execute_with_gates(
             coordinator=coordinator,
             human=human,
-            start_phase=workflow.vision.current_phase,
-            end_phase=LifecyclePhase.TESTING,  # Run through all 6 phases
-
+            start_phase=LifecyclePhase.SCOPING,
+            end_phase=LifecyclePhase.DEPLOYMENT,  # Run through all phases
         )
-
 
         print()
         print("=" * 70)
@@ -118,9 +122,36 @@ async def main():
         print(f"  Completed Phases: {', '.join(status['completed_phases'])}")
         print()
 
+        # Show generated artifacts
+        print("=" * 70)
+        print("  GENERATED ARTIFACTS")
+        print("=" * 70)
+        print()
+
+        if hasattr(workflow, 'outputs') and workflow.outputs:
+            for phase, output in workflow.outputs.items():
+                print(f"\n{phase.upper()}:")
+                if isinstance(output, dict):
+                    for key, value in output.items():
+                        if isinstance(value, str) and len(value) > 200:
+                            print(f"  {key}: {value[:200]}...")
+                        else:
+                            print(f"  {key}: {value}")
+                else:
+                    print(f"  {output}")
+
+        print()
+
+    except KeyboardInterrupt:
+        print()
+        print("❌ Workflow cancelled by user")
+        print()
+        return 1
     except Exception as e:
         print()
         print(f"❌ Workflow failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
         print()
         return 1
 

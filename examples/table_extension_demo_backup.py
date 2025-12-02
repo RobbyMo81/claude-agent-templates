@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Table Extension Demo - End-to-end demonstration of hybrid workflow.
 
@@ -14,7 +14,6 @@ import asyncio
 from agents.base.coordinator import Coordinator
 from agents.base.decision import CLIHumanInterface
 from agents.workflows.table_extension import TableExtensionWorkflow
-from agents.base.vision import LifecyclePhase
 from agents.specialized.team_assistant_agent import TeamAssistantAgent
 from agents.specialized.code_agent import CodeAgent
 from agents.specialized.schema_agent import SchemaAgent
@@ -97,10 +96,10 @@ async def main():
             coordinator=coordinator,
             human=human,
             start_phase=workflow.vision.current_phase,
-            end_phase=LifecyclePhase.TESTING,  # Run through all 6 phases
-
+            end_phase=workflow.vision.current_phase
+                     if workflow.vision.current_phase.value != "scoping"
+                     else workflow.gates[0].to_phase,  # Just do scoping phase for demo
         )
-
 
         print()
         print("=" * 70)
